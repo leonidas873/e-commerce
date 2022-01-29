@@ -3,5 +3,5 @@ import catalogReducer from './catalogReducer';
 
 
 export const reducers = combineReducers({
-    catalog:catalogReducer,
+    catalog:catalogReducer
 })
