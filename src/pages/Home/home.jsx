@@ -1,12 +1,16 @@
-import styled from 'styled-components';
-
+import SimpleSlider from '../../components/HeroSlider';
+import Overview from '../../components/Overview';
+import Stock from '../../components/Stock';
+import VideoReview from '../../components/VideoReview';
 
 export const Home = () => {
-    return <HomeStyled>  
-        home
-    </HomeStyled>
+    return (
+        <>
+            Navbar
+            < SimpleSlider />
+            <Overview />
+            <Stock />
+            <VideoReview />
+        </>
+    )
 }
-
-const HomeStyled = styled.div`
-    background-color:red;
-`
