@@ -86,36 +86,34 @@ const HeroSlider = () => {
     };
 
     return (
-        <div>
-            <Slider {...settings}>
-                <Container>
-                    <ImageContainer>
-                        <Image src="https://cdn.shopify.com/s/files/1/0551/9242/0441/files/141569803_417219312901458_4638470652865432174_n_750x.jpg?v=1642635018" />
-                        <Image src="https://cdn.shopify.com/s/files/1/0551/9242/0441/files/Mlouye_750x.jpg?v=1642635039" />
-                    </ImageContainer>
-                    <TextContent>
-                        <Wrapper>
-                            <Title>Industrial design meets fashion.</Title>
-                            <Desc>Atypical leather goods</Desc>
-                            <Button>Shop Now</Button>
-                        </Wrapper>
-                    </TextContent>
-                </Container>
-                <Container>
-                    <ImageContainer>
-                        <Image src="https://images.unsplash.com/photo-1630750797329-9772dcdee075?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" />
-                        <Image src="https://images.unsplash.com/photo-1630750794007-3561e4611134?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" />
-                    </ImageContainer>
-                    <TextContent>
-                        <Wrapper>
-                            <Title>Industrial design meets fashion.</Title>
-                            <Desc>Atypical leather goods</Desc>
-                            <Button>Shop Now</Button>
-                        </Wrapper>
-                    </TextContent>
-                </Container>
-            </Slider>
-        </div>
+        <Slider {...settings}>
+            <Container>
+                <ImageContainer>
+                    <Image src="https://cdn.shopify.com/s/files/1/0551/9242/0441/files/141569803_417219312901458_4638470652865432174_n_750x.jpg?v=1642635018" />
+                    <Image src="https://cdn.shopify.com/s/files/1/0551/9242/0441/files/Mlouye_750x.jpg?v=1642635039" />
+                </ImageContainer>
+                <TextContent>
+                    <Wrapper>
+                        <Title>Industrial design meets fashion.</Title>
+                        <Desc>Atypical leather goods</Desc>
+                        <Button>Shop Now</Button>
+                    </Wrapper>
+                </TextContent>
+            </Container>
+            <Container>
+                <ImageContainer>
+                    <Image src="https://images.unsplash.com/photo-1630750797329-9772dcdee075?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" />
+                    <Image src="https://images.unsplash.com/photo-1630750794007-3561e4611134?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" />
+                </ImageContainer>
+                <TextContent>
+                    <Wrapper>
+                        <Title>Industrial design meets fashion.</Title>
+                        <Desc>Atypical leather goods</Desc>
+                        <Button>Shop Now</Button>
+                    </Wrapper>
+                </TextContent>
+            </Container>
+        </Slider>
     );
 };
 

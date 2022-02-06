@@ -1,10 +1,11 @@
 import React from 'react';
-import LookbookComponent from '../../components/LookbookComponent';
+import { LookbookComponent, Feature } from '../../components/Components';
 
 export const LookBook = () => {
     return (
         <>
             <LookbookComponent />
+            <Feature />
         </>
     );
 };
