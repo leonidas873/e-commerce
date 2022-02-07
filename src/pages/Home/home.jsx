@@ -1,13 +1,10 @@
-import SimpleSlider from '../../components/HeroSlider';
-import Overview from '../../components/Overview';
-import Stock from '../../components/Stock';
-import VideoReview from '../../components/VideoReview';
+import { HeroSlider, Overview, Stock, VideoReview } from '../../components/Components';
 
 export const Home = () => {
     return (
         <>
             Navbar
-            < SimpleSlider />
+            < HeroSlider />
             <Overview />
             <Stock />
             <VideoReview />
