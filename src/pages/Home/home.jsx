@@ -1,13 +1,20 @@
-import styled from 'styled-components';
-import Header from '../../components/header/Header';
+import styled from "styled-components";
+import MainLayout from "../../styles/MainLayout";
+import { HeroSlider, Overview, Stock, VideoReview } from '../../components/Components';
 
 export const Home = () => {
-    return <HomeStyled>  
-        <Header/>
-        home
+  return (
+    <HomeStyled>
+      <MainLayout>
+      < HeroSlider />
+            <Overview />
+            <Stock />
+            <VideoReview />
+      </MainLayout>
     </HomeStyled>
-}
+  );
+};
 
 const HomeStyled = styled.div`
-    background-color:red;
-`
+  /* background-color: #42b67e; */
+`;
