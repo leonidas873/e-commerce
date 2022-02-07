@@ -19,7 +19,7 @@ const Header = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 5rem 0 3rem 0;
+    margin: 0rem 0 3rem 0;
 `;
 const CartHeader = styled.h2`
     font-size: 2rem;
