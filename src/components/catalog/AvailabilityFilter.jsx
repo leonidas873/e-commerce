@@ -1,18 +1,19 @@
 import styled from 'styled-components';
 import {IoIosArrowDown} from 'react-icons/io';
 import { useState } from 'react';
-import {motion, AnimatePrecense} from 'framer-motion';
-
+import {useRef} from 'react';
+import {useOnClickOutside} from '../../hooks/uiHooks';
 const AvailabilityFilter = () => {
 
-
+    const ref = useRef();
+    useOnClickOutside(ref, () => setShow(false));
     const [show, setShow] = useState(false);
 
     return <AvailabilityFilterStyled>
         {/* {show && <div className="filter__bg" onClick={()=>setShow(false)}> </div>} */}
         <div className="filter__title" onClick={()=>setShow(!show)}><span className={show && "filter__title--selected"}>Availability</span><IoIosArrowDown/></div>
 
-       {show && <div className="filter__items">
+       {show && <div className="filter__items" ref={ref}>
             <div className="filter__items-header">
                 <div className="filter__items-selected">0 selected</div>
                 <div className="filter__items-reset"><span>Reset</span></div>
