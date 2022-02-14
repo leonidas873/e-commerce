@@ -1,17 +1,18 @@
 import styled from 'styled-components';
 import {IoIosArrowDown} from 'react-icons/io';
-import { useState } from 'react';
-
+import { useState, useRef } from 'react';
+import {useOnClickOutside} from '../../hooks/uiHooks';
 
 const PriceFilter = () => {
 
-
+    const ref = useRef();
+    useOnClickOutside(ref, () => setShow(false));
     const [show, setShow] = useState(false);
 
     return <PriceFilterStyled>
         
         <div className="filter__title" onClick={()=>setShow(!show)}><span className={show && "filter__title--selected"}>Price</span><IoIosArrowDown/></div>
-       {show && <div className="filter__items">
+       {show && <div className="filter__items" ref={ref}>
             <div className="filter__items-header">
                 <div className="filter__items-selected">The highest price is $615.00</div>
                 <div className="filter__items-reset"><span>Reset</span></div>
