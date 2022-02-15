@@ -24,7 +24,7 @@ const GridContainer = styled.div`
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: 8px;
     padding-top: 28px;
     padding-bottom: 36px;
@@ -101,28 +101,12 @@ const Item = styled.div`
     }
 `;
 
-const Button = styled.button`
-    display: block;
-    border: none;
-    color: #FFFFFF;
-    background: rgb(18, 18, 18);
-    padding: 0.75rem 1.75rem;
-    font-size: 0.9rem;
-    margin: 2rem auto 0 auto;
-    transition: all 0.3s;
-    cursor: pointer;
-
-    &:hover {
-        transform: scale(1.1);
-    }
-`;
-
-const FeaturedCollection = () => {
+const AlsoLike = () => {
     return (
         <>
             <Container>
                 <Wrapper>
-                    <Header>Featured Collection</Header>
+                    <Header>You may also like</Header>
                     <GridContainer>
                         <Item>
                             <ImageContainer>
@@ -162,11 +146,10 @@ const FeaturedCollection = () => {
                             </Content>
                         </Item>
                     </GridContainer>
-                    <Button>View all</Button>
                 </Wrapper>
             </Container>
         </>
     );
 };
 
-export default FeaturedCollection;
+export default AlsoLike;
