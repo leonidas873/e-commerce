@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { cart } from '../cart';
 
@@ -179,6 +179,25 @@ const Button = styled.button`
 
 const CartComponent = () => {
     console.log(cart)
+
+    const [cartItems, setCartItems] = useState([]);
+    const [quantity, setQuantity] = useState(0);
+
+    // useEffect(() => {
+
+    //     const fetchProducts = async () => {
+    //         try {
+    //             fetch('https://ecommerse--watamasheba.herokuapp.com/cart')
+    //                 .then(response => response.json())
+    //                 .then(data => setCartItems(data));
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     }
+
+    //     fetchProducts();
+    // }, [cartItems]);
+
     return (
         <>
             <Container>
@@ -219,9 +238,9 @@ const CartComponent = () => {
                                         </TdItem>
                                         <TdItem>
                                             <CartQuantity>
-                                                <ButtonQuantity>-</ButtonQuantity>
-                                                <Input value={0} type="number" />
-                                                <ButtonQuantity>+</ButtonQuantity>
+                                                <ButtonQuantity onClick={() => setQuantity(quantity === 0 ? 0 : quantity - 1)}>-</ButtonQuantity>
+                                                <Input value={quantity} type="number" />
+                                                <ButtonQuantity onClick={() => setQuantity(quantity + 1)}>+</ButtonQuantity>
                                             </CartQuantity>
                                         </TdItem>
                                         <TdItem>

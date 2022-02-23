@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { BsZoomIn } from 'react-icons/bs';
 import { AiOutlineCar, AiOutlineHeart } from 'react-icons/ai';
 import { GiPirateCoat } from 'react-icons/gi';
@@ -37,9 +37,9 @@ const ImageContainerColumn = styled.div`
 `;
 
 const PayInfo = styled.div`
-    /* position: ${props => props.className === "relative" ? "relative" : "fixed"}; */
-    /* top: ${window.scrollY}; */
-    /* left: calc(65% - 4px); */
+    position: ${props => props.className === "scrolling" ? "fixed" : "relative"};
+    top: ${props => props.className === "scrolling" ? "0" : `${props.top}px`};
+    left: ${props => props.className === "scrolling" ? "calc(65% + 2rem + 8px - 50px)" : "0"};
     padding-left: 2rem;
     max-width: 35%;
     width: calc(35% - 4px);
@@ -207,30 +207,44 @@ const AccordionContent = styled.div`
 
 const ProductInfo = () => {
 
+    const refPayOut = useRef();
+    const refImageContainer = useRef();
+
     const [dropDown, setDropDown] = useState({
         materials: false,
         shipping: false,
         dimensions: false,
         care: false,
     });
+    const [activeProp, setActiveProp] = useState({
+        color: 'Beige',
+        Size: '36',
+    });
+    const [visible, setVisible] = useState(false);
     const [scroll, setScroll] = useState(false);
+    const [stopScrolling, setStopScrolling] = useState();
 
     useEffect(() => {
         window.addEventListener("scroll", () => {
-            if (window.scrollY > 100 && window.scrollY < 1450) {
-                setScroll(true)
+            const stopScrolling = refImageContainer.current.clientHeight - refPayOut.current.clientHeight
+
+            if (window.scrollY >= 124 && window.scrollY <= stopScrolling) {
+                setScroll(true);
+            } else if (window.scrollY < 124) {
+                setScroll(false);
+                setStopScrolling(0);
             } else {
                 setScroll(false);
+                setStopScrolling(stopScrolling);
             }
-            console.log(window.scrollY);
         });
-    }, []);
+    }, [dropDown]);
 
     return (
         <Container>
             <Wrapper>
                 <DisplayFlex>
-                    <ImageContainerColumn>
+                    <ImageContainerColumn ref={refImageContainer}>
                         <ImageContainer>
                             <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-beige-1_7cd2ddf8-5fd4-4570-a5a8-16b645ba7f59_600x.jpg?v=1637106673' />
                             <ZoomIn>
@@ -286,7 +300,7 @@ const ProductInfo = () => {
                             </ZoomIn>
                         </ImageContainer>
                     </ImageContainerColumn>
-                    <PayInfo className={scroll ? "fixed" : "relative"}>
+                    <PayInfo ref={refPayOut} top={stopScrolling} className={scroll && "scrolling"}>
                         <Title>Pleated Heel Mule</Title>
                         <Price>$495.00 CAD</Price>
                         <Properties>
