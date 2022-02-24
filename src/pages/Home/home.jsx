@@ -6,10 +6,10 @@ export const Home = () => {
   return (
     <HomeStyled>
       <MainLayout>
-      <HeroSlider />
-            <Overview />
-            <Stock />
-            <VideoReview />
+        <HeroSlider />
+        <Overview />
+        <Stock />
+        <VideoReview />
       </MainLayout>
     </HomeStyled>
   );
