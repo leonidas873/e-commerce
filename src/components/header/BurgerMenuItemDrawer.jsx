@@ -8,8 +8,6 @@ const BurgerMenuItemDrawer = ({ name, subCategories,activeBurgerItem,hideBurgerI
 
 
 
-console.log("render");
-
     const burgerItemVariants = {
         initial: { x: "100vh" },
         animate: { x: 0, transition: { duration: 0.3, type: "tween" } },

@@ -8,16 +8,18 @@ import { BsBag } from "react-icons/bs";
 import {GrClose} from "react-icons/gr";
 import HeaderMenuDropDown from "./HeaderMenuDropDown";
 import { Link } from "react-router-dom";
-import {createBrowserHistory} from 'history';
 import './header.css';
 import BurgerMenu from "./BurgerMenu";
-
-
+import { useNavigate } from 'react-router-dom';
+import {BiExit} from 'react-icons/bi';
+import { useSelector, useDispatch } from "react-redux";
+import { setLogin } from "../../redux/actions/authActions";
 
 const Header = () => {
+const navigate = useNavigate();
+
   const [showBurgerMenu, setShowBurgerMenu] = useState(false);
 
-  
 
   const [showSearch, setShowSearch] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -27,7 +29,9 @@ const Header = () => {
 
   const handleCloseSearch = () => setShowSearch(false);
   const handleShowSearch = () => setShowSearch(true);
-
+  
+  const dispatch = useDispatch();
+  const login = useSelector(state=>state.auth.login);
 
   const bags = {
     name: "Bags",
@@ -44,14 +48,14 @@ const Header = () => {
     name: "Shoes",
     subCategories: [{route:"all-shoes",value:"Shop all"}, {route:"sandals",value:"Sandals"}, {route:"boots",value:"Boots"}],
   };
+ 
 
-const history = createBrowserHistory();
   return (
     <HeaderStyled>
       
       <div className="header__content">
         <div className="header-col">
-          {showBurgerMenu?<GrClose className="burger-icon" onClick={handleCloseBurgerMenu}/> : <GiHamburgerMenu className="burger-icon" onClick={handleShowBurgerMenu}/>}
+          {showBurgerMenu?<GrClose className="burger-icon" onClick={handleCloseBurgerMenu} /> : <GiHamburgerMenu className="burger-icon" onClick={handleShowBurgerMenu}/>}
         </div>
         <div className="header-col">
           <Link to="/"><img
@@ -70,8 +74,9 @@ const history = createBrowserHistory();
         <div className="header-col">
           <div className="header__icons">
             <IoSearchOutline onClick={handleShowSearch}/>
-            <AiOutlineUser />
-            <Link to="/cart"><BsBag/></Link>
+            <BsBag onClick={()=>navigate("/cart")}/>
+            {!login ? <AiOutlineUser onClick={()=>navigate("/login")}/> : <BiExit onClick={()=>{localStorage.removeItem('token'); localStorage.removeItem('user'); dispatch(setLogin(false))}}/>}
+            
           </div>
         </div>
         <Offcanvas height={64} show={showSearch} onHide={handleCloseSearch} placement="top" className={"searchDrawer"}>
@@ -234,7 +239,7 @@ const HeaderStyled = styled.div`
   }
 
   @media (max-width: 750px) {
-    .header__icons svg:nth-child(2) {
+    .header__icons svg:nth-child(3) {
       display: none;
     }
     .header__content {

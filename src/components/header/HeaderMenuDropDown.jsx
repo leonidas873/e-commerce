@@ -35,8 +35,8 @@ const HeaderMenuDropDown = ({ name, items }) => {
       )}
       {showDropdown && (
         <div className="header-dropdown__items">
-          {items.map((item) => (
-            <Link to={`/catalog/${item.route}`}><div className="header-dropdown__item" onClick={()=>dispatch((setActiveCategory(name)))}>{item.value}</div></Link>
+          {items.map((item, index) => (
+            <Link key={index} to={`/catalog/${item.route}`}><div className="header-dropdown__item" onClick={()=>dispatch((setActiveCategory(name)))}>{item.value}</div></Link>
           ))}
         </div>
       )}

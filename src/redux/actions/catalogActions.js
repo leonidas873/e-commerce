@@ -13,3 +13,4 @@ export const setActiveCategory = (categoryName) =>{
         payload:categoryName
     }
 }
+

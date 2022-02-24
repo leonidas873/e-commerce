@@ -2,8 +2,18 @@ import styled from 'styled-components';
 import {BsArrowRight} from 'react-icons/bs';
 import {AiOutlineTwitter, AiFillFacebook, AiFillInstagram, AiFillYoutube} from 'react-icons/ai'
 import {SiTiktok} from 'react-icons/si';
+import { subscribe } from '../../api';
+import { useState } from 'react';
 
 const Footer = () => {
+
+const [email, setEmail] = useState('');
+
+    const handleSubscribe = () => {
+        subscribe(email).then(()=>alert("you have subscribed successfully"))
+    }
+
+
     return <FooterStyled>
         <div className="footer-content">
         <div className="footer-raw">
@@ -29,8 +39,8 @@ const Footer = () => {
     <div className="footer__subscribe">
         <div className="footer__subscribe-text">Subscribe to our emails</div>
         <div className="footer__subscribe-input">
-        <input placeholder='Email'/>
-        <BsArrowRight/>
+        <input placeholder='Email' onChange={e=>setEmail(e.target.value)}/>
+        <BsArrowRight onClick={handleSubscribe}/>
         </div>
     </div>
     <div className="footer__logos">
