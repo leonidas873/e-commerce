@@ -64,6 +64,8 @@ const PayInfo = styled.div`
     @media screen and (max-width: 750px){
         width: 100%;
         padding-left: 0;
+        position: relative;
+        top: 0;
     }
 `;
 
