@@ -5,6 +5,8 @@ import { GiPirateCoat } from 'react-icons/gi';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { FaRuler } from 'react-icons/fa';
 import styled from "styled-components";
+import ImageGallery from 'react-image-gallery';
+import { Modal } from 'react-bootstrap';
 
 
 const Container = styled.div`
@@ -37,11 +39,11 @@ const ImageContainerColumn = styled.div`
 `;
 
 const PayInfo = styled.div`
-    position: ${props => props.className === "scrolling" ? "fixed" : "relative"};
+    position: ${props => props.className === "scrolling" ? "sticky" : "relative"};
     top: ${props => props.className === "scrolling" ? "0" : `${props.top}px`};
-    left: ${props => props.className === "scrolling" ? "calc(65% + 2rem + 8px - 50px)" : "0"};
+    left: 0;
     padding-left: 2rem;
-    max-width: 35%;
+    max-width: 420px;
     width: calc(35% - 4px);
     display: flex;
     flex-direction: column;
@@ -223,6 +225,7 @@ const ProductInfo = () => {
     const [visible, setVisible] = useState(false);
     const [scroll, setScroll] = useState(false);
     const [stopScrolling, setStopScrolling] = useState();
+    const [imageStartIndex, setImageStartIndex] = useState(0);
 
     useEffect(() => {
         window.addEventListener("scroll", () => {
@@ -238,63 +241,106 @@ const ProductInfo = () => {
                 setStopScrolling(stopScrolling);
             }
         });
+        const currentY = window.scrollY
+        window.scrollTo(0, currentY + 1);
     }, [dropDown]);
+
+    const images = [
+        {
+            original: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-beige-1_7cd2ddf8-5fd4-4570-a5a8-16b645ba7f59_600x.jpg?v=1637106673',
+            thumbnail: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-beige-1_7cd2ddf8-5fd4-4570-a5a8-16b645ba7f59_600x.jpg?v=1637106673',
+        },
+        {
+            original: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-mules-off-white-1_1800x1800_2c06129f-4e73-4ffa-ad8b-39e8d4486d1a_600x.jpg?v=1637106673',
+            thumbnail: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-mules-off-white-1_1800x1800_2c06129f-4e73-4ffa-ad8b-39e8d4486d1a_600x.jpg?v=1637106673',
+        },
+        {
+            original: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-denim-5_edbc146e-5629-4f5d-8614-2e0972a09f16_600x.jpg?v=1637106673',
+            thumbnail: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-denim-5_edbc146e-5629-4f5d-8614-2e0972a09f16_600x.jpg?v=1637106673',
+        },
+        {
+            original: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-denim-3_7014ad43-2606-4fbb-abf8-6a0d358c0be4_600x.jpg?v=1637106673',
+            thumbnail: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-denim-3_7014ad43-2606-4fbb-abf8-6a0d358c0be4_600x.jpg?v=1637106673',
+        },
+        {
+            original: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-beige-2_a3129ddf-438e-4058-81c7-0eca0ea35119_600x.jpg?v=1637106673',
+            thumbnail: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-beige-2_a3129ddf-438e-4058-81c7-0eca0ea35119_600x.jpg?v=1637106673',
+        },
+        {
+            original: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-mules-off-white-2_1800x1800_a1b8a93d-f0ea-4ecb-80b7-f233ae96d5e4_600x.jpg?v=1637106673',
+            thumbnail: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-mules-off-white-2_1800x1800_a1b8a93d-f0ea-4ecb-80b7-f233ae96d5e4_600x.jpg?v=1637106673',
+        },
+        {
+            original: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-bordeaux-5_fa88cc7b-441c-4383-b2c8-665ea543ca57_600x.jpg?v=1637106673',
+            thumbnail: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-bordeaux-5_fa88cc7b-441c-4383-b2c8-665ea543ca57_600x.jpg?v=1637106673',
+        },
+        {
+            original: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-bordeaux-5_fa88cc7b-441c-4383-b2c8-665ea543ca57_600x.jpg?v=1637106673',
+            thumbnail: 'https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-bordeaux-5_fa88cc7b-441c-4383-b2c8-665ea543ca57_600x.jpg?v=1637106673',
+        },
+    ];
+
+    const handleModal = (e) => {
+        setImageStartIndex(parseInt(e.target.dataset.id) - 1);
+        setVisible(true);
+        console.log(parseInt(e.target.dataset.id) - 1);
+    }
 
     return (
         <Container>
             <Wrapper>
                 <DisplayFlex>
                     <ImageContainerColumn ref={refImageContainer}>
-                        <ImageContainer>
-                            <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-beige-1_7cd2ddf8-5fd4-4570-a5a8-16b645ba7f59_600x.jpg?v=1637106673' />
+                        <ImageContainer onClick={(e) => handleModal(e)}>
+                            <Image data-id={1} src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-beige-1_7cd2ddf8-5fd4-4570-a5a8-16b645ba7f59_600x.jpg?v=1637106673' />
                             <ZoomIn>
                                 <BsZoomIn />
                             </ZoomIn>
                         </ImageContainer>
                         <ImageRow>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-mules-off-white-1_1800x1800_2c06129f-4e73-4ffa-ad8b-39e8d4486d1a_600x.jpg?v=1637106673' />
+                            <ImageContainer onClick={(e) => handleModal(e)}>
+                                <Image data-id={2} src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-mules-off-white-1_1800x1800_2c06129f-4e73-4ffa-ad8b-39e8d4486d1a_600x.jpg?v=1637106673' />
                                 <ZoomIn>
                                     <BsZoomIn />
                                 </ZoomIn>
                             </ImageContainer>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-denim-5_edbc146e-5629-4f5d-8614-2e0972a09f16_600x.jpg?v=1637106673' />
-                                <ZoomIn>
-                                    <BsZoomIn />
-                                </ZoomIn>
-                            </ImageContainer>
-                        </ImageRow>
-                        <ImageRow>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-denim-3_7014ad43-2606-4fbb-abf8-6a0d358c0be4_600x.jpg?v=1637106673' />
-                                <ZoomIn>
-                                    <BsZoomIn />
-                                </ZoomIn>
-                            </ImageContainer>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-beige-2_a3129ddf-438e-4058-81c7-0eca0ea35119_600x.jpg?v=1637106673' />
+                            <ImageContainer onClick={(e) => handleModal(e)}>
+                                <Image data-id={3} src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-denim-5_edbc146e-5629-4f5d-8614-2e0972a09f16_600x.jpg?v=1637106673' />
                                 <ZoomIn>
                                     <BsZoomIn />
                                 </ZoomIn>
                             </ImageContainer>
                         </ImageRow>
                         <ImageRow>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-mules-off-white-2_1800x1800_a1b8a93d-f0ea-4ecb-80b7-f233ae96d5e4_600x.jpg?v=1637106673' />
+                            <ImageContainer onClick={(e) => handleModal(e)}>
+                                <Image data-id={4} src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-denim-3_7014ad43-2606-4fbb-abf8-6a0d358c0be4_600x.jpg?v=1637106673' />
                                 <ZoomIn>
                                     <BsZoomIn />
                                 </ZoomIn>
                             </ImageContainer>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-bordeaux-5_fa88cc7b-441c-4383-b2c8-665ea543ca57_600x.jpg?v=1637106673' />
+                            <ImageContainer onClick={(e) => handleModal(e)}>
+                                <Image data-id={5} src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-beige-2_a3129ddf-438e-4058-81c7-0eca0ea35119_600x.jpg?v=1637106673' />
                                 <ZoomIn>
                                     <BsZoomIn />
                                 </ZoomIn>
                             </ImageContainer>
                         </ImageRow>
-                        <ImageContainer>
-                            <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-bordeaux-5_fa88cc7b-441c-4383-b2c8-665ea543ca57_600x.jpg?v=1637106673' />
+                        <ImageRow>
+                            <ImageContainer onClick={(e) => handleModal(e)}>
+                                <Image data-id={6} src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-mules-off-white-2_1800x1800_a1b8a93d-f0ea-4ecb-80b7-f233ae96d5e4_600x.jpg?v=1637106673' />
+                                <ZoomIn>
+                                    <BsZoomIn />
+                                </ZoomIn>
+                            </ImageContainer>
+                            <ImageContainer onClick={(e) => handleModal(e)}>
+                                <Image data-id={7} src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-bordeaux-5_fa88cc7b-441c-4383-b2c8-665ea543ca57_600x.jpg?v=1637106673' />
+                                <ZoomIn>
+                                    <BsZoomIn />
+                                </ZoomIn>
+                            </ImageContainer>
+                        </ImageRow>
+                        <ImageContainer onClick={(e) => handleModal(e)}>
+                            <Image data-id={8} src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-pleated-heel-mules-bordeaux-5_fa88cc7b-441c-4383-b2c8-665ea543ca57_600x.jpg?v=1637106673' />
                             <ZoomIn>
                                 <BsZoomIn />
                             </ZoomIn>
@@ -375,6 +421,29 @@ const ProductInfo = () => {
                         </Accordion>
                     </PayInfo>
                 </DisplayFlex>
+                <Modal
+                    size="lg"
+                    show={visible}
+                    onHide={() => setVisible(false)}
+                    aria-labelledby="example-modal-sizes-title-lg"
+                    centered
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title id="example-modal-sizes-title-lg">
+                            Large Modal
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <ImageGallery
+                            items={images}
+                            showFullscreenButton={false}
+                            startIndex={imageStartIndex}
+                            showPlayButton={false}
+                            thumbnailPosition="left"
+                            autoPlay={false}
+                        />
+                    </Modal.Body>
+                </Modal>
             </Wrapper>
         </Container>
     )
