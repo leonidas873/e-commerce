@@ -1,100 +1,98 @@
-import styled from 'styled-components';
-import {IoIosArrowDown} from 'react-icons/io';
-import AvailabilityFilter from './AvailabilityFilter';
-import PriceFilter from './PriceFilter';
-import ColorFilter from './ColorFilter';
+import styled from "styled-components";
+import { BsSliders } from "react-icons/bs";
+import AvailabilityFilter from "./AvailabilityFilter";
+import PriceFilter from "./PriceFilter";
+import ColorFilter from "./ColorFilter";
+import { useState } from "react";
+import FiltersBurger from "./FiltersBurger";
 
 const CatalogFilters = () => {
-    return <CatalogFilterStyled>
-        <div className="catalogFilters-content">
-<div className='catalogFilters-left'>
-    <div className="catalogFilters-left__title">Filter:</div>
 
-<AvailabilityFilter/>
-<PriceFilter/>
-<ColorFilter/>
-</div>
-<div className='catalogFilters-right'>
-<div className="catalogFilters-left__title">Sort by:</div>
-<div className="catalogFilters-right-select">
-<select >
-    <option selected>Featured</option>
-    <option>Alphabetically A-Z</option>
-    <option>Alphabetically Z-A</option>
-    <option>Price low to high</option>
-    <option>Price high to low</option>
-</select>
-</div>
-<div className="products__quantity">26 products</div>
-</div>
-</div>
+  const [showFiltersBurger, setShowFiltersBurger] = useState(false);
+
+
+  return (
+    <CatalogFilterStyled>
+      <FiltersBurger showFiltersBurger={showFiltersBurger} setShowFiltersBurger={()=>setShowFiltersBurger(false)}/>
+      <div className="catalogFilters-content">
+        <div className="catalogFilter-modal-opener" onClick={()=>setShowFiltersBurger(true)}>
+          <BsSliders />Filter and Sort
+        </div>
+        <div className="catalogFilters-left">
+          <div className="catalogFilters-left__title">Filter:</div>
+          <AvailabilityFilter />
+          <PriceFilter />
+          <ColorFilter />
+        </div>
+        <div className="catalogFilters-right">
+          <div className="catalogFilters-right__title">Sort by:</div>
+          <div className="catalogFilters-right__select">
+            <select>
+              <option selected>Featured</option>
+              <option>Alphabetically A-Z</option>
+              <option>Alphabetically Z-A</option>
+              <option>Price low to high</option>
+              <option>Price high to low</option>
+            </select>
+          </div>
+          <div className="products__quantity">26 products</div>
+        </div>
+      </div>
     </CatalogFilterStyled>
-}
+  );
+};
 
 export default CatalogFilters;
 
 const CatalogFilterStyled = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: rgb(18, 18, 18, 0.75);
+  /* margin:20px 0px; */
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:14px;
-    color: rgb(18,18,18,0.75);
-    margin:20px 0px;
-    
+  .catalogFilters-content {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    box-sizing: border-box;
+    padding: 0 50px;
+  }
 
+  .catalogFilters-left {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: center;
+  }
 
-    .filter__bg{
-    background-color:transparent;
-    position:fixed;
-    top:0;
-    left:0;
-    height:100vh;
-    width:100vw;
-}
+  .catalog__filter {
+    position: relative;
+  }
 
-
-    .catalogFilters-content{
-        display:flex;
-        width:100%;
-        max-width:1200px;
-        box-sizing:border-box;
-        padding:0 50px;
-    }
-
-    .catalogFilters-left{
-        flex:1;
-        display:flex;
-        flex-wrap:wrap;
-        gap:20px;
-        justify-content:flex-start;
-        align-items:center;
-    }
-
-.catalog__filter{
-    position:relative;
-}
-
-.filter__items{
-    position:absolute;
-    background-color:white;
+  .filter__items {
+    position: absolute;
+    background-color: white;
     top: 30px;
     left: -10px;
-    border:1px solid #121212bc;
+    border: 1px solid #121212bc;
     animation: dropdownAnimate 0.3s;
-}
-.filter__items-selected{
-    white-space: nowrap;;
-}
+    z-index:123;
+  }
+  .filter__items-selected {
+    white-space: nowrap;
+  }
 
-
-.filter__items-reset span{
-border-bottom:1px solid #121212bc;
-}
-.filter__items-reset span:hover{
-    color:black;
-border-bottom:2px solid #121212bc;
-}
+  .filter__items-reset span {
+    border-bottom: 1px solid #121212bc;
+  }
+  .filter__items-reset span:hover {
+    color: black;
+    border-bottom: 2px solid #121212bc;
+  }
   @keyframes dropdownAnimate {
     from {
       opacity: 0;
@@ -106,49 +104,77 @@ border-bottom:2px solid #121212bc;
     }
   }
 
-.filter__title{
-    display:flex;
-    justify-content:flex-start;
-    align-items:center;
-    gap:5px;
-    
-}
+  .filter__title {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+  }
 
-.filter__title span{
-    border:1px solid;
-    border-color:#12121200;
-}
-.filter__title span:hover{
+  .filter__title span {
+    border: 1px solid;
+    border-color: #12121200;
+  }
+  .filter__title span:hover {
     border-bottom: 1px solid #121212;
-    cursor:pointer;
-}
-    .catalogFilters-right{
-        flex:1;
-        display:flex;
-        gap:15px;
-        justify-content:flex-end;
-        align-items:center;
+    cursor: pointer;
+  }
+  .catalogFilters-right {
+    flex: 1;
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .catalogFilters-right__select {
+    padding: 10px;
 
-    }
-    .catalogFilters-right-select{
-        padding:10px;
-        
-        border:2px solid #12121200;
-    }
+    border: 2px solid #12121200;
+  }
 
-    .catalogFilters-right-select:focus-within{
-        padding:10px;
-        border:2px solid black;
-    }
-    .catalogFilters-right-select select{
-        outline:none;
-        border:none;
-        background:transparent;
-        color:#121212bf;
-    }
+  .catalogFilters-right__select:focus-within {
+    padding: 10px;
+    border: 2px solid black;
+  }
+  .catalogFilters-right__select select {
+    outline: none;
+    border: none;
+    background: transparent;
+    color: #121212bf;
+  }
 
-    .filter__title--selected{
+  .filter__title--selected {
     border-bottom: 1px solid #121212 !important;
+    cursor: pointer;
+  }
+
+  .catalogFilter-modal-opener {
+    display: none;
     cursor:pointer;
-}
-`
+  }
+
+  @media (max-width: 750px) {
+    .catalogFilters-content {
+      padding: 10px 15px 10px 15px;
+    }
+
+    .catalogFilter-modal-opener {
+      display: block;
+    }
+
+    .catalogFilter-modal-opener > svg {
+      margin-right: 10px;
+    }
+
+    .catalogFilters-left {
+      display: none;
+    }
+    .catalogFilters-right__title {
+      display: none;
+    }
+
+    .catalogFilters-right__select {
+      display: none;
+    }
+  }
+`;

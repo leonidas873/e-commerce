@@ -1,2 +1,3 @@
 export const SET_CATALOG = 'SET_CATALOG';
 export const SET_ACTIVE_CATEGORY = 'SET_ACTIVE_CATEGORY';
+export const SET_LOGIN = "SET_LOGIN";
