@@ -29,6 +29,10 @@ const DisplayFlex = styled.div`
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+
+    @media screen and (max-width: 750px){
+        flex-direction: column;
+    }
 `;
 
 const ImageContainerColumn = styled.div`
@@ -36,6 +40,13 @@ const ImageContainerColumn = styled.div`
     width: calc(65% - 4px);
     display: flex;
     flex-direction: column;
+
+    @media screen and (max-width: 990px){
+        width: 50%;
+    }
+    @media screen and (max-width: 750px){
+        display: none;
+    }
 `;
 
 const PayInfo = styled.div`
@@ -43,10 +54,17 @@ const PayInfo = styled.div`
     top: ${props => props.className === "scrolling" ? "0" : `${props.top}px`};
     left: 0;
     padding-left: 2rem;
-    max-width: 420px;
     width: calc(35% - 4px);
     display: flex;
     flex-direction: column;
+
+    @media screen and (max-width: 990px){
+        width: 50%;
+    }
+    @media screen and (max-width: 750px){
+        width: 100%;
+        padding-left: 0;
+    }
 `;
 
 const Image = styled.img`
@@ -74,6 +92,10 @@ const ImageRow = styled.div`
     grid-gap: 8px;
 
     &:nth-child(1){
+        grid-template-columns: auto;
+    }
+
+    @media screen and (max-width: 990px){
         grid-template-columns: auto;
     }
 `;
