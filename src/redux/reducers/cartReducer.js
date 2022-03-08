@@ -1,22 +1,21 @@
-import { SET_CATALOG, SET_ACTIVE_CATEGORY } from "../actionTypes/actionTypes";
+import { SET_CART_PRODUCTS, DELETE_CART_PRODUCT } from "../actionTypes/actionTypes";
 
 const initialState = {
   cart: [],
-  
 };
 
 const cartReducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    // case SET_CATALOG:
-    //   return {
-    //     ...state,
-    //     catalog: payload,
-    //   };
-    // case SET_ACTIVE_CATEGORY:
-    //   return {
-    //     ...state,
-    //     activeCategory: payload,
-    //   };
+    case SET_CART_PRODUCTS:
+      return {
+        ...state,
+        cart: payload,
+      };
+    case DELETE_CART_PRODUCT:
+      return {
+        ...state,
+        cart: payload,
+      };
     default:
       return {
         ...state,
