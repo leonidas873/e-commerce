@@ -231,7 +231,7 @@ const AccordionContent = styled.div`
     letter-spacing: 0.06rem;
 `;
 
-const ProductInfo = () => {
+const ProductInfo = ({ singleProduct }) => {
 
     const refPayOut = useRef();
     const refImageContainer = useRef();
@@ -371,8 +371,12 @@ const ProductInfo = () => {
                         </ImageContainer>
                     </ImageContainerColumn>
                     <PayInfo ref={refPayOut} top={stopScrolling} className={scroll && "scrolling"}>
-                        <Title>Pleated Heel Mule</Title>
-                        <Price>$495.00 CAD</Price>
+                        <Title>
+                            {singleProduct?.title}
+                        </Title>
+                        <Price>
+                            $ {singleProduct?.price?.find(p => p.name == 'USD')?.price}.00 CAD
+                        </Price>
                         <Properties>
                             <PropertyItem>
                                 <PropertyTitle>Color</PropertyTitle>
@@ -400,8 +404,9 @@ const ProductInfo = () => {
                         <StyleGuide>Size Guide</StyleGuide>
                         <AddToCart>Add to cart</AddToCart>
                         <Desc>
-                            <p>This is a demonstration store. You can purchase products like this from Mlouye.</p>
-                            <p>Featuring a unique combination of modern art and minimalist perspective, our Helix Bag is perfectly sized to fit just the essentials - think small wallet, keys, sunglasses and large phone. It has a wind spinner silhouette that will remind you summer breezes out on the porch. The top handle is cleverly linked to the body through its hidden joint; it can fall down when you use the bag with shoulder strap. Made from smooth leather and has a suede internal with a drawstring top to keep all you have stowed inside safe and secure.</p>
+                            <p>
+                                {singleProduct?.description}
+                            </p>
                         </Desc>
                         <Accordion>
                             <AccordionDetails onClick={() => setDropDown({ ...dropDown, materials: !dropDown.materials })}>
@@ -411,7 +416,9 @@ const ProductInfo = () => {
                                 </AccordionDetailsTitle>
                                 {dropDown.materials ? <IoIosArrowUp /> : <IoIosArrowDown />}
                             </AccordionDetails>
-                            <AccordionContent className={dropDown.materials ? "active" : null}>Crafted from Italian cow leather, and suede. You can carry it by the top handle or go hands-free with the shoulder strap. Silver hardware.</AccordionContent>
+                            <AccordionContent className={dropDown.materials ? "active" : null}>
+                                {singleProduct?.materials}
+                            </AccordionContent>
                         </Accordion>
                         <Accordion>
                             <AccordionDetails onClick={() => setDropDown({ ...dropDown, shiping: !dropDown.shiping })}>
@@ -431,7 +438,9 @@ const ProductInfo = () => {
                                 </AccordionDetailsTitle>
                                 {dropDown.dimensions ? <IoIosArrowUp /> : <IoIosArrowDown />}
                             </AccordionDetails>
-                            <AccordionContent className={dropDown.dimensions ? "active" : null}>h:16 X w:19 cm (6.25 X 7.5 in)</AccordionContent>
+                            <AccordionContent className={dropDown.dimensions ? "active" : null}>
+                                {singleProduct?.dimensions}
+                            </AccordionContent>
                         </Accordion>
                         <Accordion>
                             <AccordionDetails onClick={() => setDropDown({ ...dropDown, care: !dropDown.care })}>
@@ -441,7 +450,9 @@ const ProductInfo = () => {
                                 </AccordionDetailsTitle>
                                 {dropDown.care ? <IoIosArrowUp /> : <IoIosArrowDown />}
                             </AccordionDetails>
-                            <AccordionContent className={dropDown.care ? "active" : null}>Use a soft damp cloth and a drop of mild soap to remove any haze. Air dry.</AccordionContent>
+                            <AccordionContent className={dropDown.care ? "active" : null}>
+                                {singleProduct?.careInstructions}
+                            </AccordionContent>
                         </Accordion>
                     </PayInfo>
                 </DisplayFlex>

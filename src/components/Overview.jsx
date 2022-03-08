@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { getAllProducts } from '../api';
+import { useNavigate } from 'react-router-dom'
 
 
 const Container = styled.div`
@@ -120,6 +122,14 @@ const Item = styled.div`
 `;
 
 const Overview = () => {
+    const [products, setProducts] = useState([])
+    const navigation = useNavigate()
+
+    useEffect(() => {
+        getAllProducts()
+        .then(res => setProducts(res.data))
+        .catch(error => console.log(error))
+    }, [])
 
     return (
         <Container>
@@ -129,7 +139,29 @@ const Overview = () => {
                     <Desc>Functional handbags made of luxurious materials to improve people's lives in small but mighty ways.</Desc>
                 </Header>
                 <GridContainer>
-                    <Item>
+                    {
+                        products?.map((product, index) => (
+                            index < 8 && <Item onClick={() => navigation(`/product/${product?.productId}`)}>
+                                <ImageContainer>
+                                    <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-small-convertible-flex-bag-cappuccino-n1_360x.jpg?v=1637107143' />
+                                    <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-small-convertible-flex-bag-cappuccino-n2_360x.jpg?v=1637107143' />
+                                    {
+                                        product?.price < 300 &&
+                                        <Sale> Sale </Sale>
+                                    }
+                                </ImageContainer>
+                                <Content>
+                                    <Title>
+                                        {product?.title}
+                                    </Title>
+                                    <Price>
+                                        $ {product?.price}.00
+                                    </Price>
+                                </Content>
+                            </Item>
+                        ))
+                    }
+                    {/* <Item>
                         <ImageContainer>
                             <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-small-convertible-flex-bag-cappuccino-n1_360x.jpg?v=1637107143' />
                             <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-small-convertible-flex-bag-cappuccino-n2_360x.jpg?v=1637107143' />
@@ -216,7 +248,7 @@ const Overview = () => {
                             <Title>Small Bag</Title>
                             <Price>320$</Price>
                         </Content>
-                    </Item>
+                    </Item> */}
                 </GridContainer>
             </Wrapper>
         </Container >

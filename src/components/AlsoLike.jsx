@@ -101,14 +101,37 @@ const Item = styled.div`
     }
 `;
 
-const AlsoLike = () => {
+const AlsoLike = ({featuredProducts}) => {
     return (
         <>
             <Container>
                 <Wrapper>
                     <Header>You may also like</Header>
                     <GridContainer>
-                        <Item>
+                        {
+                            featuredProducts?.map(product => (
+                                <Item>
+                                    <ImageContainer>
+                                        <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-art-deco-cyclamen-1_ec8e69b6-92ea-4c48-b8b6-34601cf3c070_360x.jpg?v=1637106934' />
+                                        {
+                                            product?.price < 300 &&
+                                            <Sale>
+                                                Sale
+                                            </Sale>
+                                        }
+                                    </ImageContainer>
+                                    <Content>
+                                        <Title>
+                                            {product?.title}
+                                        </Title>
+                                        <Price>
+                                            $ {product?.price}.00 CAD
+                                        </Price>
+                                    </Content>
+                                </Item>
+                            ))
+                        }
+                        {/* <Item>
                             <ImageContainer>
                                 <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-art-deco-cyclamen-1_ec8e69b6-92ea-4c48-b8b6-34601cf3c070_360x.jpg?v=1637106934' />
                                 <Sale>Sale</Sale>
@@ -144,7 +167,7 @@ const AlsoLike = () => {
                                 <Title>Brick</Title>
                                 <Price>$ 385 CAD</Price>
                             </Content>
-                        </Item>
+                        </Item> */}
                     </GridContainer>
                 </Wrapper>
             </Container>

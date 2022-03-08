@@ -54,3 +54,14 @@ export const getSortedProducts = async (type) => {
     throw new Error(err)
   }
 }
+
+
+// getting single product
+
+export const getSingleProduct = async productId => {
+  try {
+    return axios.get(`${SERVER_URL}/products/${productId}`)
+  } catch (err) {
+    throw new Error(err)
+  }
+}
