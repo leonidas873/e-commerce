@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import { Home, Catalog, Error,Cart,LookBook, Product  } from './pages';
+import { Home, Catalog, Error,Cart,LookBook, Product, LoginPage, RegisterPage, Recover  } from './pages';
 import {Routes, Route} from 'react-router-dom';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";

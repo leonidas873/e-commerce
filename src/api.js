@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const SERVER_URL = 'http://node-env-1.eba-npp53eyx.us-east-1.elasticbeanstalk.com';
+const SERVER_URL = 'http://ecommerce-web.us-east-1.elasticbeanstalk.com';
 
 export const login = async (email, password) => {
     try {
@@ -15,9 +15,10 @@ export const login = async (email, password) => {
 
   export const register = async (values) => {
     try {
-      const results = await axios.post(`${SERVER_URL}/auth/register`, values);
-      localStorage.setItem("user", JSON.stringify(results.data.userData.email));
-      localStorage.setItem("token", results.data.token);  
+      const result = await axios.post(`${SERVER_URL}/auth/register`, values);
+      // localStorage.setItem("user", JSON.stringify(results.data.userData.email));
+      // localStorage.setItem("token", results.data.token);  
+      return result;
     } catch (err) {
       throw new Error(err);
     }
@@ -32,3 +33,26 @@ export const login = async (email, password) => {
       alert(err.response.data)
     }
   };  
+
+
+// products 
+
+export const getAllProducts = async () => {
+  try {
+    let result = axios.get(`${SERVER_URL}/products`);
+    return result;
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+// sort 
+
+export const getSortedProducts = async (type) => {
+  try {
+    let result = axios.get(`${SERVER_URL}/products/?sort=${type}`);
+    return result;
+  } catch (err) {
+    throw new Error(err)
+  }
+}
