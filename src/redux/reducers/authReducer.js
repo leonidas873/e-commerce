@@ -2,7 +2,7 @@ import { SET_LOGIN } from "../actionTypes/actionTypes";
 
 const initialState = {
   login: false,
-  
+
 };
 
 const authReducer = (state = initialState, { type, payload }) => {
