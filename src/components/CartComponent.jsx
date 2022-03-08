@@ -1,9 +1,9 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { cart } from '../cart';
-import axiosInstance from '../shared/axios/axiosInstance';
+import { API } from '../utils/API';
 import CartItem from './CartItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCart } from "../redux/actions/cartActions"
 
 const Container = styled.div`
     width: 100%;
@@ -95,22 +95,25 @@ const Button = styled.button`
 
 const CartComponent = () => {
 
-    const [cartItems, setCartItems] = useState([]);
+    const dispatch = useDispatch();
+    const cartProducts = useSelector(state => state.cart.cart);
 
     useEffect(() => {
 
         const fetchProducts = async () => {
             try {
                 const url = `/cart`;
-                const response = await axiosInstance.get(url);
-                setCartItems(response.data.responseResult.data);
+                const response = await API.get(url)
+                    .then(res => {
+                        dispatch(setCart(res.data));
+                    })
             } catch (error) {
                 console.log(error);
             }
         }
 
         fetchProducts();
-    }, [cartItems]);
+    }, []);
 
     return (
         <>
@@ -120,7 +123,7 @@ const CartComponent = () => {
                         <CartHeader>Your cart</CartHeader>
                         <ContinueShopping>Continue Shopping</ContinueShopping>
                     </Header>
-                    {cart.length === 0 ?
+                    {cartProducts?.length === 0 ?
                         <DisplayFlex>
                             <EmptyTitle>Your cart is empty</EmptyTitle>
                             <Button>Continue Shopping</Button>
@@ -135,7 +138,7 @@ const CartComponent = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {cart.map(item => <CartItem item={item} />)}
+                                {cartProducts?.map(item => <CartItem key={item.id} item={item} />)}
                             </tbody>
                         </Table>
                     }

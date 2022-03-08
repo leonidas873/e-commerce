@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { setUpdatedCart } from '../redux/actions/cartActions';
+import { API } from '../utils/API';
+import { BiTrashAlt } from 'react-icons/bi';
 
 const TdItem = styled.td`
     padding: 2rem 0 0 2rem;
@@ -47,6 +51,7 @@ const Item = styled.p`
     font-size: 0.9rem;
     margin-top: 0.6rem;
     color: rgba(18, 18, 18, 0.7);
+    margin-bottom: 0;
 `;
 const CartQuantity = styled.div`
     border: 1px solid black;
@@ -88,33 +93,97 @@ const Input = styled.input`
 }
 `;
 
+const DisplayFlex = styled.div`
+    display: flex;
+    align-items: center;
+
+    & svg {
+        font-size: 25px;
+        padding: 5px;
+        color: rgba(18, 18, 18, .5);
+        box-sizing: content-box;
+        margin-left: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &:hover {
+            color: rgb(18, 18, 18);
+        }
+    }
+`;
+
 const CartItem = ({ item }) => {
 
-    const [quantity, setQuantity] = useState(0);
+    const dispatch = useDispatch();
+    const [quantity, setQuantity] = useState(item.number);
+    const cartProducts = useSelector(state => state.cart.cart);
+
+    const handleQuantity = async (type) => {
+        if (type === "add") {
+            setQuantity(quantity + 1);
+            try {
+                const url = `/cart/${item.id}`;
+                const response = await API.put(url, { number: quantity + 1 })
+            } catch (error) {
+                console.log(error);
+            }
+        } else if (type === "remove") {
+            if (quantity === 1) {
+                try {
+                    const url = `/cart/${item.id}`;
+                    const response = await API.delete(url);
+                    const updatedCart = cartProducts.filter(component => component.id !== item.id);
+                    dispatch(setUpdatedCart(updatedCart));
+                } catch (error) {
+                    console.log(error);
+                }
+            } else {
+                setQuantity(quantity - 1)
+                try {
+                    const url = `/cart/${item.id}`;
+                    const response = await API.put(url, { number: quantity - 1 })
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+        } else {
+            try {
+                const url = `/cart/${item.id}`;
+                const response = await API.delete(url);
+                const updatedCart = cartProducts.filter(component => component.id !== item.id);
+                dispatch(setUpdatedCart(updatedCart));
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
 
     return (
         <tr key={item.id}>
             <TdItem>
-                <Image src={item.img} />
+                <Image src="https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-small-convertible-flex-bag-cappuccino-n1_360x.jpg?v=1637107143" />
             </TdItem>
             <TdItem>
-                <Title>{item.title}</Title>
-                <Price>{item.price}</Price>
+                <Title>{item.productData.title}</Title>
+                <Price>${item.productData.price}.00</Price>
                 <Properties>
-                    {item.properties.map(prop => (
-                        <Item key={prop.id}>{prop.name}: {prop.value}</Item>
-                    ))}
+                    <Item>Color: {item.productData.color}</Item>
+                    <Item>Materias: {item.productData.materials}</Item>
                 </Properties>
             </TdItem>
             <TdItem>
-                <CartQuantity>
-                    <ButtonQuantity onClick={() => setQuantity(quantity === 0 ? 0 : quantity - 1)}>-</ButtonQuantity>
-                    <Input value={quantity} type="number" />
-                    <ButtonQuantity onClick={() => setQuantity(quantity + 1)}>+</ButtonQuantity>
-                </CartQuantity>
+                <DisplayFlex>
+                    <CartQuantity>
+                        <ButtonQuantity onClick={() => handleQuantity("remove")}>-</ButtonQuantity>
+                        <Input value={quantity} type="number" />
+                        <ButtonQuantity onClick={() => handleQuantity("add")}>+</ButtonQuantity>
+                    </CartQuantity>
+                    <BiTrashAlt onClick={() => handleQuantity()} />
+                </DisplayFlex>
             </TdItem>
             <TdItem>
-                <Price>$ {quantity * parseInt(item.price.split(' ')[1])}.00</Price>
+                <Price>$ {quantity * item.productData.price}.00</Price>
             </TdItem>
         </tr>
     )
