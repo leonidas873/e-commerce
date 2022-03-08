@@ -27,8 +27,8 @@ const BurgerMenuItemDrawer = ({ name, subCategories,activeBurgerItem,hideBurgerI
             <div className="burgerMenuItemDrawer__title" onClick={hideBurgerItemDrawer}>
               <BsArrowRight classNAme="arrow-left"/> {name}
             </div>
-            {subCategories.map((category) => (
-              <div className="burgerMenuItemDrawer__item" key={category}>
+            {subCategories.map((category, index) => (
+              <div className="burgerMenuItemDrawer__item" key={index}>
                 {category.value}
               </div>
             ))}
