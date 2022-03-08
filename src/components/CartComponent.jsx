@@ -1,6 +1,8 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { cart } from '../cart';
+import axiosInstance from '../shared/axios/axiosInstance';
 import CartItem from './CartItem';
 
 const Container = styled.div`
@@ -92,24 +94,23 @@ const Button = styled.button`
 `;
 
 const CartComponent = () => {
-    console.log(cart)
 
     const [cartItems, setCartItems] = useState([]);
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     const fetchProducts = async () => {
-    //         try {
-    //             fetch('https://ecommerse--watamasheba.herokuapp.com/cart')
-    //                 .then(response => response.json())
-    //                 .then(data => setCartItems(data));
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     }
+        const fetchProducts = async () => {
+            try {
+                const url = `/cart`;
+                const response = await axiosInstance.get(url);
+                setCartItems(response.data.responseResult.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
 
-    //     fetchProducts();
-    // }, [cartItems]);
+        fetchProducts();
+    }, [cartItems]);
 
     return (
         <>
