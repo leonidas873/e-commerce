@@ -1,58 +1,38 @@
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from "react";
+import { getAllProducts } from '../../api';
+import { setCatalog } from '../../redux/actions/catalogActions';
+
 
 const CatalogProducts = () => {
+    const dispatch = useDispatch();
+    const products = useSelector(state=>state.catalog.catalog);
+
+    
+    useEffect(()=>{
+
+        getAllProducts().then(res=>dispatch(setCatalog(res.data)))
+      
+      },[])
+
+
+
+
+
     return <CatalogProductsStyled>
         <GridContainer>
-<Item>
+            {products && products.map(product=>  <Item key={product.productId}>
                             <ImageContainer>
                                 <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-art-deco-cyclamen-1_ec8e69b6-92ea-4c48-b8b6-34601cf3c070_360x.jpg?v=1637106934' />
                                 <Sale>Sale</Sale>
                             </ImageContainer>
                             <Content>
-                                <Title>Art Deco</Title>
-                                <Price>$ 165.00 CAD</Price>
+                                <Title>{product.title}</Title>
+                                <Price>$ {product.price} CAD</Price>
                             </Content>
                         </Item>
-                        <Item>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-art-deco-cyclamen-1_ec8e69b6-92ea-4c48-b8b6-34601cf3c070_360x.jpg?v=1637106934' />
-                                <Sale>Sale</Sale>
-                            </ImageContainer>
-                            <Content>
-                                <Title>Art Deco</Title>
-                                <Price>$ 165.00 CAD</Price>
-                            </Content>
-                        </Item>
-                        <Item>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-art-deco-cyclamen-1_ec8e69b6-92ea-4c48-b8b6-34601cf3c070_360x.jpg?v=1637106934' />
-                                <Sale>Sale</Sale>
-                            </ImageContainer>
-                            <Content>
-                                <Title>Art Deco</Title>
-                                <Price>$ 165.00 CAD</Price>
-                            </Content>
-                        </Item>
-                        <Item>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-art-deco-cyclamen-1_ec8e69b6-92ea-4c48-b8b6-34601cf3c070_360x.jpg?v=1637106934' />
-                                <Sale>Sale</Sale>
-                            </ImageContainer>
-                            <Content>
-                                <Title>Art Deco</Title>
-                                <Price>$ 165.00 CAD</Price>
-                            </Content>
-                        </Item>
-                        <Item>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-art-deco-cyclamen-1_ec8e69b6-92ea-4c48-b8b6-34601cf3c070_360x.jpg?v=1637106934' />
-                                <Sale>Sale</Sale>
-                            </ImageContainer>
-                            <Content>
-                                <Title>Art Deco</Title>
-                                <Price>$ 165.00 CAD</Price>
-                            </Content>
-                        </Item>
+            )}
                         </GridContainer>
     </CatalogProductsStyled>
 }

@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {useState} from 'react';
 import {RiErrorWarningFill} from 'react-icons/ri'
+import { register } from "../../api";
 
 const Register = () => {
 
@@ -24,7 +25,7 @@ const Register = () => {
   };
 
   const onSubmit = (values) => {
-   console.log(values)
+   register(values).then(()=>{alert("you have registered successfully"); navigate("/login")})
 
   };
 

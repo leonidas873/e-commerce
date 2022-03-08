@@ -5,18 +5,35 @@ import PriceFilter from "./PriceFilter";
 import ColorFilter from "./ColorFilter";
 import { useState } from "react";
 import FiltersBurger from "./FiltersBurger";
+import { setCatalog } from "../../redux/actions/catalogActions";
+import { useDispatch } from "react-redux";
+import { getSortedProducts } from "../../api";
 
 const CatalogFilters = () => {
-
+  const dispatch = useDispatch();
   const [showFiltersBurger, setShowFiltersBurger] = useState(false);
-
+  const [selectValue, setSelectValue] = useState("");
+  const handleSortChange = (e) => {
+    setSelectValue(e.target.value);
+    getSortedProducts(e.target.value).then((res) =>{
+      dispatch(setCatalog(res.data));
+    }
+    );
+  };
 
   return (
     <CatalogFilterStyled>
-      <FiltersBurger showFiltersBurger={showFiltersBurger} setShowFiltersBurger={()=>setShowFiltersBurger(false)}/>
+      <FiltersBurger
+        showFiltersBurger={showFiltersBurger}
+        setShowFiltersBurger={() => setShowFiltersBurger(false)}
+      />
       <div className="catalogFilters-content">
-        <div className="catalogFilter-modal-opener" onClick={()=>setShowFiltersBurger(true)}>
-          <BsSliders />Filter and Sort
+        <div
+          className="catalogFilter-modal-opener"
+          onClick={() => setShowFiltersBurger(true)}
+        >
+          <BsSliders />
+          Filter and Sort
         </div>
         <div className="catalogFilters-left">
           <div className="catalogFilters-left__title">Filter:</div>
@@ -27,12 +44,12 @@ const CatalogFilters = () => {
         <div className="catalogFilters-right">
           <div className="catalogFilters-right__title">Sort by:</div>
           <div className="catalogFilters-right__select">
-            <select>
-              <option selected>Featured</option>
-              <option>Alphabetically A-Z</option>
-              <option>Alphabetically Z-A</option>
-              <option>Price low to high</option>
-              <option>Price high to low</option>
+            <select value={selectValue} onChange={handleSortChange}>
+              <option value="">Featured</option>
+              <option value="alph-AZ">Alphabetically A-Z</option>
+              <option value="alph-ZA">Alphabetically Z-A</option>
+              <option value="price-ASC">Price low to high</option>
+              <option value="price-DESC">Price high to low</option>
             </select>
           </div>
           <div className="products__quantity">26 products</div>
@@ -80,7 +97,7 @@ const CatalogFilterStyled = styled.div`
     left: -10px;
     border: 1px solid #121212bc;
     animation: dropdownAnimate 0.3s;
-    z-index:123;
+    z-index: 123;
   }
   .filter__items-selected {
     white-space: nowrap;
@@ -150,7 +167,7 @@ const CatalogFilterStyled = styled.div`
 
   .catalogFilter-modal-opener {
     display: none;
-    cursor:pointer;
+    cursor: pointer;
   }
 
   @media (max-width: 750px) {
