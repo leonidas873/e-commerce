@@ -7,6 +7,8 @@ import { FaRuler } from 'react-icons/fa';
 import styled from "styled-components";
 import ImageGallery from 'react-image-gallery';
 import { Modal } from 'react-bootstrap';
+import { addToCart, getColors } from '../api';
+import Loading from './loading/Loading';
 
 
 const Container = styled.div`
@@ -232,6 +234,10 @@ const AccordionContent = styled.div`
 `;
 
 const ProductInfo = ({ singleProduct }) => {
+    const [isLoading, setIsLoading] = useState(false)
+    const [isAdded, setIsAdded] = useState(false)
+    const [isDisabled, setIsDisabled] = useState(false)
+    const [colors, setColors] = useState([])
 
     const refPayOut = useRef();
     const refImageContainer = useRef();
@@ -310,6 +316,36 @@ const ProductInfo = ({ singleProduct }) => {
         console.log(parseInt(e.target.dataset.id) - 1);
     }
 
+    const handleAddToCard = id => {
+        setIsLoading(true)
+        addToCart(singleProduct?.productId)
+        .then(res => {
+            setTimeout(() =>{
+                setIsLoading(false)
+                setIsAdded(true)
+                setIsDisabled(false)
+            }, 500)
+        })
+        .catch(error => {
+            if(error.response.status === 403) {
+                setTimeout(() => {
+                    setIsLoading(false)
+                    alert('Product is not avalaible any more')
+                    setIsDisabled(true)
+                }, 850)
+            } else {
+                console.log(error)
+            }
+            setIsAdded(false)
+        })
+    }
+
+    useEffect(() => {
+        getColors()
+        .then(res => setColors(res.data))
+        .catch(error => console.log(error))
+    }, [])
+
     return (
         <Container>
             <Wrapper>
@@ -381,11 +417,13 @@ const ProductInfo = ({ singleProduct }) => {
                             <PropertyItem>
                                 <PropertyTitle>Color</PropertyTitle>
                                 <ButtonRow>
-                                    <PropertyButton>Beige</PropertyButton>
-                                    <PropertyButton>Off White</PropertyButton>
-                                    <PropertyButton>Olive</PropertyButton>
-                                    <PropertyButton>Bordeaux</PropertyButton>
-                                    <PropertyButton>Denim</PropertyButton>
+                                    {
+                                        colors?.map(color => (
+                                            <PropertyButton key={color}>
+                                                {color}
+                                            </PropertyButton>
+                                        ))
+                                    }
                                 </ButtonRow>
                             </PropertyItem>
                             <PropertyItem>
@@ -402,7 +440,19 @@ const ProductInfo = ({ singleProduct }) => {
                             </PropertyItem>
                         </Properties>
                         <StyleGuide>Size Guide</StyleGuide>
-                        <AddToCart>Add to cart</AddToCart>
+                        <div style={{position: 'relative'}}>
+                            {
+                                isAdded ? <AddToCart>Successfuly Added</AddToCart> :
+                                <AddToCart
+                                    onClick={() => handleAddToCard(singleProduct?.productId)}
+                                    disabled={isDisabled}
+                                    style={{opacity: isDisabled ? .5 : 1}}
+                                >
+                                    Add to cart
+                                </AddToCart>
+                            }
+                            {isLoading && <Loading />}
+                        </div>
                         <Desc>
                             <p>
                                 {singleProduct?.description}

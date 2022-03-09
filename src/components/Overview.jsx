@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { getAllProducts } from '../api';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 
 const Container = styled.div`
@@ -141,7 +141,7 @@ const Overview = () => {
                 <GridContainer>
                     {
                         products?.map((product, index) => (
-                            index < 8 && <Item onClick={() => navigation(`/product/${product?.productId}`)}>
+                            index < 8 && <Item key={index} onClick={() => navigation(`/product/${product?.productId}`)}>
                                 <ImageContainer>
                                     <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-small-convertible-flex-bag-cappuccino-n1_360x.jpg?v=1637107143' />
                                     <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-small-convertible-flex-bag-cappuccino-n2_360x.jpg?v=1637107143' />

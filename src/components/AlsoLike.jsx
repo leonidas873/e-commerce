@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom'
 
 const Container = styled.div`
     width: 100%;
@@ -102,6 +103,13 @@ const Item = styled.div`
 `;
 
 const AlsoLike = ({featuredProducts}) => {
+    const navigation = useNavigate()
+
+    const handleNavigate = id => {
+        navigation(`/product/${id}`)
+        window.location.reload()
+    }
+
     return (
         <>
             <Container>
@@ -110,7 +118,7 @@ const AlsoLike = ({featuredProducts}) => {
                     <GridContainer>
                         {
                             featuredProducts?.map(product => (
-                                <Item>
+                                <Item key={product?.productId} onClick={() => handleNavigate(product?.productId)}>
                                     <ImageContainer>
                                         <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-art-deco-cyclamen-1_ec8e69b6-92ea-4c48-b8b6-34601cf3c070_360x.jpg?v=1637106934' />
                                         {

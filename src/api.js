@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API } from './utils/API';
 
 const SERVER_URL = 'http://ecommerce-web.us-east-1.elasticbeanstalk.com';
 
@@ -61,6 +62,27 @@ export const getSortedProducts = async (type) => {
 export const getSingleProduct = async productId => {
   try {
     return axios.get(`${SERVER_URL}/products/${productId}`)
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+
+// add to cart
+
+export const addToCart = async productId => {
+  try {
+    return API.post(`/cart`, {productId: productId, number: 1})
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+// get all possible product color
+
+export const getColors = ()=> {
+  try {
+    return axios.get(`${SERVER_URL}/colors`)
   } catch (err) {
     throw new Error(err)
   }

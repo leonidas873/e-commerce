@@ -4,13 +4,26 @@ import {AiOutlineTwitter, AiFillFacebook, AiFillInstagram, AiFillYoutube} from '
 import {SiTiktok} from 'react-icons/si';
 import { subscribe } from '../../api';
 import { useState } from 'react';
+import Loading from '../loading/Loading'
 
 const Footer = () => {
-
-const [email, setEmail] = useState('');
+    const [email, setEmail] = useState('');
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleSubscribe = () => {
-        subscribe(email).then(()=>alert("you have subscribed successfully"))
+        setIsLoading(true)
+        subscribe(email)
+        .then(() => {
+            setTimeout(() => {
+                setIsLoading(false)
+                alert("you have subscribed successfully")
+            }, 500)
+        }).catch(error => {
+            setTimeout(() => {
+                setIsLoading(false)
+                console.log(error)
+            }, 850)
+        })
     }
 
 
@@ -38,9 +51,12 @@ const [email, setEmail] = useState('');
 <div className="footer-raw2">
     <div className="footer__subscribe">
         <div className="footer__subscribe-text">Subscribe to our emails</div>
-        <div className="footer__subscribe-input">
-        <input placeholder='Email' onChange={e=>setEmail(e.target.value)}/>
-        <BsArrowRight onClick={handleSubscribe}/>
+        <div className="footer__subscribe-input" style={{position: 'relative'}}>
+            <input placeholder='Email' onChange={e=>setEmail(e.target.value)}/>
+            <BsArrowRight onClick={handleSubscribe}/>
+            {
+                isLoading && <Loading />
+            }
         </div>
     </div>
     <div className="footer__logos">
@@ -119,15 +135,14 @@ max-width:1200px;
     flex-direction:column;
 }
 .footer__subscribe-input{
-background:white;
-max-width:358px;
-display:flex;
-align-items:center;
-box-sizing:border-box;
-padding:10px;
-outline:2px solid #1212126a;
-width:100%;
-
+    background:white;
+    max-width:358px;
+    display:flex;
+    align-items:center;
+    box-sizing:border-box;
+    padding:10px;
+    outline:2px solid #1212126a;
+    width:100%;
 }
 .footer__subscribe-input svg{
     font-size:18px;
