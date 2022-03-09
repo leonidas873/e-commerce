@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { getAllProducts } from '../api';
+import { getSortedProducts } from '../api';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -130,7 +130,7 @@ const Overview = () => {
     const navigation = useNavigate()
 
     useEffect(() => {
-        getAllProducts()
+        getSortedProducts('date-DESC')
         .then(res => setProducts(res.data))
         .catch(error => console.log(error))
     }, [])

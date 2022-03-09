@@ -455,7 +455,7 @@ const ProductInfo = ({ singleProduct }) => {
                         </div>
                         <Desc>
                             <p>
-                                {singleProduct?.description}
+                                {singleProduct?.about}
                             </p>
                         </Desc>
                         <Accordion>
