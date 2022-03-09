@@ -162,7 +162,7 @@ const CartItem = ({ item }) => {
     return (
         <tr key={item.id}>
             <TdItem>
-                <Image src="https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-small-convertible-flex-bag-cappuccino-n1_360x.jpg?v=1637107143" />
+                <Image src={item.productData.img==null ? "https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-small-convertible-flex-bag-cappuccino-n1_360x.jpg?v=1637107143" : item.productData.img} />
             </TdItem>
             <TdItem>
                 <Title>{item.productData.title}</Title>
