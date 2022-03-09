@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { getSortedProducts } from '../api';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -125,15 +124,8 @@ const Item = styled.div`
     }
 `;
 
-const Overview = () => {
-    const [products, setProducts] = useState([])
+const Overview = ({products}) => {
     const navigation = useNavigate()
-
-    useEffect(() => {
-        getSortedProducts('date-DESC')
-        .then(res => setProducts(res.data))
-        .catch(error => console.log(error))
-    }, [])
 
     return (
         <Container>

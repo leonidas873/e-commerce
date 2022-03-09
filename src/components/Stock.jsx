@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BsArrowRight } from 'react-icons/bs'
+import { BsArrowRight } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 
 
 const Container = styled.div`
@@ -129,13 +130,15 @@ const FlexColumn = styled.div`
     }
 `;
 
-const Stock = () => {
+const Stock = ({singleProduct}) => {
+    const navigation = useNavigate()
+
     return (
         <Container>
             <Wrapper>
                 <Header>Back in stock!</Header>
                 <FlexContainer>
-                    <Left>
+                    <Left onClick={() => navigation(`/catalog/all-bags`)}>
                         <ImageContainer>
                             <Image src="https://cdn.shopify.com/s/files/1/0551/9242/0441/collections/Mlouye_-_Bags_collection_750x.jpg?v=1637109194" />
                         </ImageContainer>
@@ -147,16 +150,18 @@ const Stock = () => {
                         </Content>
                     </Left>
                     <FlexColumn>
-                        <Item>
+                        <Item onClick={() => navigation(`/product/${singleProduct?.productId}`)}>
                             <ImageContainer>
-                                <Image src="https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-mini-eddy-off-white-1_1c48b857-644c-44b6-825f-b87bc84a9ab6_165x.jpg?v=1642620360" />
+                                <Image src={singleProduct?.img} />
                             </ImageContainer>
                             <Content>
-                                <Title>Mini Eddy</Title>
-                                <Price>$375.00 CAD</Price>
+                                <Title>
+                                    {singleProduct?.title}
+                                </Title>
+                                <Price>${singleProduct?.price}.00 CAD</Price>
                             </Content>
                         </Item>
-                        <Item>
+                        <Item onClick={() => navigation(`/catalog/all-shoes`)}>
                             <ImageContainer>
                                 <Image src="https://cdn.shopify.com/s/files/1/0551/9242/0441/collections/Mlouye_-_Shoe_collection_165x.jpg?v=1637109743" />
                             </ImageContainer>
