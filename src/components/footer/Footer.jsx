@@ -11,16 +11,21 @@ const Footer = () => {
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSubscribe = () => {
+        const reset = () => {
+            setIsLoading(false)
+            setEmail('')
+        }
+
         setIsLoading(true)
         subscribe(email)
         .then(() => {
             setTimeout(() => {
-                setIsLoading(false)
+                reset()
                 alert("you have subscribed successfully")
             }, 500)
         }).catch(error => {
             setTimeout(() => {
-                setIsLoading(false)
+                reset()
                 console.log(error)
             }, 850)
         })
@@ -52,10 +57,15 @@ const Footer = () => {
     <div className="footer__subscribe">
         <div className="footer__subscribe-text">Subscribe to our emails</div>
         <div className="footer__subscribe-input" style={{position: 'relative'}}>
-            <input placeholder='Email' onChange={e=>setEmail(e.target.value)}/>
-            <BsArrowRight onClick={handleSubscribe}/>
+            <input
+                placeholder='Email'
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+            />
             {
-                isLoading && <Loading />
+                isLoading ?
+                <Loading /> :
+                <BsArrowRight disabled={isLoading} onClick={handleSubscribe}/>
             }
         </div>
     </div>

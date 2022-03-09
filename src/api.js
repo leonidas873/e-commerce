@@ -78,7 +78,7 @@ export const addToCart = async productId => {
   }
 }
 
-// get all possible product color
+// get all possible product colors
 
 export const getColors = ()=> {
   try {

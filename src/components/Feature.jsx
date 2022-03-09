@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { getAllProducts } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     width: 100%;
@@ -41,6 +43,10 @@ const ImageContainer = styled.div`
     width: 100%;
     position: relative;
     overflow: hidden;
+    max-height: 260px;
+    @media screen and (max-width: 991px){
+        height: 180px;
+    }
 `;
 
 const Image = styled.img`
@@ -105,83 +111,45 @@ const Item = styled.div`
 `;
 
 const Feature = () => {
+    const [featuredProducts, setFeraturedProducts] = useState([])
+    const navigation = useNavigate()
+
+    const handleNavigate = id => {
+        navigation(`/product/${id}`)
+        window.location.reload()
+    }
+    
+    useEffect(() => {
+        getAllProducts()
+        .then(res => {
+            let sortedArr = res.data.sort((a,b) => {
+                return new Date(b.createdAt) - new Date(a.createdAt);
+            })
+            let arr = sortedArr.filter((_, index) => index < 8)
+            setFeraturedProducts(arr)
+        }).catch(error => console.log(error))
+    }, [])
+
     return (
         <Container>
             <Wrapper>
                 <Header>Featured</Header>
                 <GridContainer>
-                    <Item>
-                        <ImageContainer>
-                            <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-studio-denim-1_cb1da2bc-0ed8-4836-a120-dcf9f2caf1e3_360x.jpg?v=1637108123' />
-                        </ImageContainer>
-                        <Content>
-                            <Title>Studio Bag</Title>
-                            <Price>$ 465.00 CAD</Price>
-                        </Content>
-                    </Item>
-                    <Item>
-                        <ImageContainer>
-                            <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-business-bag-black_grey-1_360x.jpg?v=1637106913' />
-                        </ImageContainer>
-                        <Content>
-                            <Title>Business Bag</Title>
-                            <Price>$ 545 CAD</Price>
-                        </Content>
-                    </Item>
-                    <Item>
-                        <ImageContainer>
-                            <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-lantern-bag-pleated-mint-nn1_360x.jpg?v=1637106944' />
-                        </ImageContainer>
-                        <Content>
-                            <Title>Lantern Bag Pleated</Title>
-                            <Price>$ 460 CAD</Price>
-                        </Content>
-                    </Item>
-                    <Item>
-                        <ImageContainer>
-                            <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-helix-multicolor-2_1800x1800_10c62242-6743-4d46-a251-defa246dd195_360x.jpg?v=1637107119' />
-                        </ImageContainer>
-                        <Content>
-                            <Title>Helix</Title>
-                            <Price>$ 470 CAD</Price>
-                        </Content>
-                    </Item>
-                    <Item>
-                        <ImageContainer>
-                            <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-sera-tote-butter-1_40a894e5-2624-4582-b8f1-8fbd5e46776d_360x.jpg?v=1637107252' />
-                        </ImageContainer>
-                        <Content>
-                            <Title>Hera Tote</Title>
-                            <Price>$ 545 CAD</Price>
-                        </Content>
-                    </Item>
-                    <Item>
-                        <ImageContainer>
-                            <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-brick-oil-yellow-1_360x.jpg?v=1637107420' />
-                        </ImageContainer>
-                        <Content>
-                            <Title>Brick</Title>
-                            <Price>$ 385 CAD</Price>
-                        </Content>
-                    </Item>
-                    <Item>
-                        <ImageContainer>
-                            <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-stormi-cognac-olive-leaf-1_360x.jpg?v=1637107747' />
-                        </ImageContainer>
-                        <Content>
-                            <Title>Stormi</Title>
-                            <Price>$ 545 CAD</Price>
-                        </Content>
-                    </Item>
-                    <Item>
-                        <ImageContainer>
-                            <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-mini-eddy-off-white-1_1c48b857-644c-44b6-825f-b87bc84a9ab6_360x.jpg?v=1642620360' />
-                        </ImageContainer>
-                        <Content>
-                            <Title>Mini Eddy</Title>
-                            <Price>$ 375 CAD</Price>
-                        </Content>
-                    </Item>
+                    {
+                        featuredProducts?.map(product => (
+                            <Item key={product?.productId} onClick={() => handleNavigate(product?.productId)}>
+                                <ImageContainer>
+                                    <Image src={product?.img} />
+                                </ImageContainer>
+                                <Content>
+                                    <Title>
+                                        {product?.title}
+                                    </Title>
+                                    <Price>$ {product?.price} CAD</Price>
+                                </Content>
+                            </Item>)
+                        )
+                    }
                 </GridContainer>
             </Wrapper>
         </Container>
