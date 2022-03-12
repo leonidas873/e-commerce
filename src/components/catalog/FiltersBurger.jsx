@@ -4,9 +4,8 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BsArrowRight } from "react-icons/bs";
 import styled from "styled-components";
 import FilterBurgerSubDrawer from "./FilterBurgerSubDrawer";
-import { getSortedProducts } from "../../api";
-import { useDispatch } from "react-redux";
-import { setCatalog } from "../../redux/actions/catalogActions";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilters } from "../../redux/actions/catalogActions";
 
 
 const FiltersBurger = ({ showFiltersBurger, setShowFiltersBurger }) => {
@@ -14,13 +13,11 @@ const FiltersBurger = ({ showFiltersBurger, setShowFiltersBurger }) => {
   const [show, setShow] = useState(false);
   const [selectValue, setSelectValue] = useState("");
   const dispatch = useDispatch();
+  const filters = useSelector(state=>state.catalog.filters);
 
   const handleSortChange = (e) => {
     setSelectValue(e.target.value);
-    getSortedProducts(e.target.value).then((res) =>{
-      dispatch(setCatalog(res.data));
-    }
-    );
+    dispatch(setFilters({...filters, sort:e.target.value}))
   };
   return (
     <>
@@ -28,6 +25,7 @@ const FiltersBurger = ({ showFiltersBurger, setShowFiltersBurger }) => {
         show={showFiltersBurger}
         placement="end"
         onHide={setShowFiltersBurger}
+        
       >
         <FilterBurgerSubDrawer
           show={show}
@@ -73,7 +71,7 @@ const FiltersBurger = ({ showFiltersBurger, setShowFiltersBurger }) => {
           <div className="filterBurger__filter">
             sort by:{" "}
             <div className="sort__wrapper">
-            <select value={selectValue} onChange={handleSortChange}>
+            <select defaultValue={filters.sort} onChange={handleSortChange}>
               <option value="">Featured</option>
               <option value="alph-AZ">Alphabetically A-Z</option>
               <option value="alph-ZA">Alphabetically Z-A</option>
