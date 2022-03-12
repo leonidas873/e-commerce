@@ -1,35 +1,45 @@
 import { BsArrowRight } from "react-icons/bs";
+import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
 
-
-const BurgerMenuItemDrawer = ({ name, subCategories,activeBurgerItem,hideBurgerItemDrawer}) => {
-
-
-
-    const burgerItemVariants = {
-        initial: { x: "100vh" },
-        animate: { x: 0, transition: { duration: 0.3, type: "tween" } },
-        exit: { x: "100vh", transition: { duration: 0.3, type: "tween" } },
-      };
-
+const BurgerMenuItemDrawer = ({
+  name,
+  subCategories,
+  activeBurgerItem,
+  hideBurgerItemDrawer,
+  setTypeId,
+  setShowBurgerMenu
+}) => {
+  const navigate = useNavigate();
+  const burgerItemVariants = {
+    initial: { x: "100vh" },
+    animate: { x: 0, transition: { duration: 0.3, type: "tween" } },
+    exit: { x: "100vh", transition: { duration: 0.3, type: "tween" } },
+  };
 
   return (<AnimatePresence>
       {(activeBurgerItem===name) && (
         <motion.div
-            variants={burgerItemVariants}
+          variants={burgerItemVariants}
           initial="initial"
           animate="animate"
           exit="exit"
         >
           <BurgerMenuItemDrawerStyled>
             <div className="burgerMenuItemDrawer__title" onClick={hideBurgerItemDrawer}>
-              <BsArrowRight classNAme="arrow-left"/> {name}
+              <BsArrowRight className="arrow-left"/> {name}
             </div>
-            {subCategories.map((category, index) => (
-              <div className="burgerMenuItemDrawer__item" key={index}>
-                {category.value}
+            {subCategories?.map((item, index) => (
+              <div
+                key={index}
+                className="burgerMenuItemDrawer__item"
+                onClick={() => {
+                  setTypeId(item?.typeId)
+                  setShowBurgerMenu(false)
+                  navigate(`/catalog/${item?.route}`)
+                }}>
+                {item?.typeName}
               </div>
             ))}
           </BurgerMenuItemDrawerStyled>

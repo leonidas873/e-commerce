@@ -141,7 +141,7 @@ const PriceContent = () => {
   const dispatch = useDispatch();
 
   return <PriceBodyStyled>
-    <h5>The highest price is $615.00</h5>
+    <h5>The highest price is $15000.00</h5>
     <div className="inputs">
     <PriceInput>$ <input type="number" placeholder="From" value={filters.priceFrom} onChange={e=>dispatch(setFilters({...filters, priceFrom:e.target.value}))}/></PriceInput>
       <PriceInput>$ <input type="number" placeholder="To" value={filters.priceTo} onChange={e=>dispatch(setFilters({...filters, priceTo:e.target.value}))}/></PriceInput>
@@ -160,11 +160,22 @@ const PriceContent = () => {
 
     return <ColorBodyStyled>
     {colors.map((color, index )=><ColorOption key={index}><input
-                  type="radio"
+                  type="checkbox"
                   name="color"
                   value={color}
-                  checked={filters.color==color}
-                  onChange={(e) => dispatch(setFilters({ ...filters, color }))}
+                  checked={filters.colors?.includes(color)}
+                  onChange={(e) => {
+                    if(e.target.checked) {
+                      dispatch(setFilters({ ...filters, colors: [...filters.colors, color] }))
+                    } else {
+                      let colorsArray = filters.colors
+                      let index = colorsArray.indexOf(color)
+                      if(index > -1) {
+                        colorsArray.splice(index, 1)
+                      }
+                      dispatch(setFilters({ ...filters, colors: [...colorsArray] }))
+                    }
+                  }}
                 /> {color}</ColorOption>)}
     </ColorBodyStyled>
     }  

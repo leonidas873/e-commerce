@@ -87,10 +87,22 @@
   align-items: center;
   cursor:pointer;
   font-size:18px;
+  color: #000;
+  text-decoration: none;
 }
 
-.burger__menu-item__title:hover{
+.burger__menu-item__title div {
+  width: 100%;
+}
+
+.burger__menu-item__title:hover {
   background-color:#F6F6F6;
+  color: #000;
+}
+
+.burger__menu-item__title:focus {
+  background-color:#F6F6F6;
+  color: #000;
 }
 
 .burgerMenu__footer{

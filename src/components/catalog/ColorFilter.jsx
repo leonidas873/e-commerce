@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { IoIosArrowDown } from "react-icons/io";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useOnClickOutside } from "../../hooks/uiHooks";
 import { useSelector, useDispatch } from "react-redux";
 import { setFilters } from "../../redux/actions/catalogActions";
@@ -12,6 +12,20 @@ const ColorFilter = () => {
   const dispatch = useDispatch();
   const filters = useSelector((state) => state.catalog.filters);
   const colors = useSelector((state) => state.catalog.colors);
+  const [selectedNum, setSelectedNum] = useState(0);
+
+  useEffect(() => {
+    setSelectedNum(filters?.colors?.length)
+  }, [filters])
+
+  const handleReset = () => {
+    dispatch(setFilters({ ...filters, colors: [] }))
+    colors?.forEach((color, index) => {
+      if(document.getElementById(`color-checkbox-${index}`)) {
+        document.getElementById(`color-checkbox-${index}`).checked = false
+      }
+    })
+  }
 
   return (
     <ColorFilterStyled>
@@ -23,8 +37,8 @@ const ColorFilter = () => {
       {show && (
         <div className="filter__items" ref={ref}>
           <div className="filter__items-header">
-            <div className="filter__items-selected">0 selected</div>
-            <div className="filter__items-reset">
+            <div className="filter__items-selected">{selectedNum} selected</div>
+            <div className="filter__items-reset" onClick={handleReset}>
               <span>Reset</span>
             </div>
           </div>
@@ -32,13 +46,25 @@ const ColorFilter = () => {
             {colors.map((color, ind) => (
               <div className="filter__item" key={ind}>
                 <input
-                  type="radio"
+                  id={`color-checkbox-${ind}`}
+                  type="checkbox"
                   name="color"
                   value={color}
-                  checked={filters.color==color}
-                  onChange={(e) => dispatch(setFilters({ ...filters, color }))}
+                  checked={filters.colors?.includes(color)}
+                  onChange={(e) => {
+                    if(e.target.checked) {
+                      dispatch(setFilters({ ...filters, colors: [...filters.colors, color] }))
+                    } else {
+                      let colorsArray = filters.colors
+                      let index = colorsArray.indexOf(color)
+                      if(index > -1) {
+                        colorsArray.splice(index, 1)
+                      }
+                      dispatch(setFilters({ ...filters, colors: [...colorsArray] }))
+                    }
+                  }}
                 />
-                {color}
+                <label htmlFor={`color-checkbox-${ind}`}>{color}</label>
               </div>
             ))}
           </div>

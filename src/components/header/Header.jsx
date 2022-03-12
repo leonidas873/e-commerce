@@ -1,24 +1,28 @@
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { Offcanvas } from "react-bootstrap";
-import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getTypes } from "../../api";
+import { setFilters } from "../../redux/actions/catalogActions";
 import { IoSearchOutline } from "react-icons/io5";
 import { AiOutlineUser, AiOutlineClose } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { BsBag } from "react-icons/bs";
 import { GrClose } from "react-icons/gr";
-import HeaderMenuDropDown from "./HeaderMenuDropDown";
-import { Link } from "react-router-dom";
-import "./header.css";
-import BurgerMenu from "./BurgerMenu";
-import { useNavigate } from "react-router-dom";
 import { BiExit } from "react-icons/bi";
-import { useSelector, useDispatch } from "react-redux";
 import { setLogin } from "../../redux/actions/authActions";
 import { setSearchQuery } from "../../redux/actions/catalogActions";
+import HeaderMenuDropDown from "./HeaderMenuDropDown";
+import BurgerMenu from "./BurgerMenu";
+import styled from "styled-components";
+import "./header.css";
 
 
 const Header = () => {
   const navigate = useNavigate();
+  const [types, setTypes] = useState([]);
+  const [typeId, setTypeId] = useState(null);
+  const filters = useSelector((state) => state.catalog.filters);
 
   const handleCloseBurgerMenu = () => setShowBurgerMenu(false);
   const handleShowBurgerMenu = () => setShowBurgerMenu(true);
@@ -29,25 +33,15 @@ const Header = () => {
   const dispatch = useDispatch();
   const login = useSelector((state) => state.auth.login);
 
-  const bags = {
-    name: "Bags",
-    subCategories: [
-      { route: "all-bags", value: "Shop all" },
-      { route: "tote-bags", value: "Tote Bags" },
-      { route: "shoulder-bags", value: "Shoulder Bags" },
-      { route: "crossbody-bags", value: "Crossbody bags" },
-      { route: "top-handle-bags", value: "Top handle bags" },
-      { route: "mini-bags", value: "Mini bags" },
-    ],
-  };
-  const shoes = {
-    name: "Shoes",
-    subCategories: [
-      { route: "all-shoes", value: "Shop all" },
-      { route: "sandals", value: "Sandals" },
-      { route: "boots", value: "Boots" },
-    ],
-  };
+  useEffect(() => {
+    getTypes()
+    .then(res => setTypes(res.data))
+    .catch(error => console.log(error))
+  }, [])
+
+  useEffect(() => {
+    dispatch(setFilters({...filters, typeId: typeId}))
+  }, [typeId])
 
   const [showBurgerMenu, setShowBurgerMenu] = useState(false);
 
@@ -81,8 +75,16 @@ const Header = () => {
         </div>
         <div className="header-col">
           <div className="header__menu">
-            <HeaderMenuDropDown name={bags.name} items={bags.subCategories} />
-            <HeaderMenuDropDown name={shoes.name} items={shoes.subCategories} />
+            <HeaderMenuDropDown
+              name={"Bags"}
+              types={types?.filter(type => Number(type?.typeId)<6)}
+              setTypeId={setTypeId}
+            />
+            <HeaderMenuDropDown
+              name={"Shoes"}
+              types={types?.filter(type => Number(type?.typeId)>=6)}
+              setTypeId={setTypeId}
+            />
             <div className="header__menu-item">
               <span>
                 <Link to="/lookbook">Lookbook</Link>
@@ -135,7 +137,11 @@ const Header = () => {
       <BurgerMenu
         showBurgerMenu={showBurgerMenu}
         setShowBurgerMenu={() => setShowBurgerMenu(false)}
-        categories={{ bags: bags, shoes: shoes }}
+        setTypeId={setTypeId}
+        categories={{ 
+          bags: types?.filter(type => Number(type?.typeId)<6),
+          shoes: types?.filter(type => Number(type?.typeId)>=6)
+        }}
       />
     </HeaderStyled>
   );

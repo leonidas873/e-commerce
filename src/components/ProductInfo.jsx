@@ -7,7 +7,7 @@ import { FaRuler } from 'react-icons/fa';
 import styled from "styled-components";
 import ImageGallery from 'react-image-gallery';
 import { Modal } from 'react-bootstrap';
-import { addToCart, getColors } from '../api';
+import { addToCart, getAllColors } from '../api';
 import Loading from './loading/Loading';
 
 
@@ -341,7 +341,7 @@ const ProductInfo = ({ singleProduct }) => {
     }
 
     useEffect(() => {
-        getColors()
+        getAllColors()
         .then(res => setColors(res.data))
         .catch(error => console.log(error))
     }, [])

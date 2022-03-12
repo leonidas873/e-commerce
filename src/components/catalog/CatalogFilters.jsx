@@ -1,12 +1,12 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { BsSliders } from "react-icons/bs";
 import AvailabilityFilter from "./AvailabilityFilter";
 import PriceFilter from "./PriceFilter";
 import ColorFilter from "./ColorFilter";
-import { useState } from "react";
 import FiltersBurger from "./FiltersBurger";
 import { setFilters } from "../../redux/actions/catalogActions";
-import { useDispatch, useSelector } from "react-redux";
 import {IoIosClose} from "react-icons/io";
 
 const CatalogFilters = () => {
@@ -20,6 +20,24 @@ const CatalogFilters = () => {
     setSelectValue(e.target.value);
     dispatch(setFilters({...filters, sort:e.target.value}))
   };
+
+  const handleReset = () => {
+    dispatch(setFilters({
+      priceFrom: '',
+      priceTo: '',
+      stock: '',
+      colors: [],
+      typeId: null,
+      sort:''
+    }))
+  }
+
+  const handleRemoveFilter = filter => {
+    console.log(filter, '----filter')
+    if(filter !=  'typeId' && filter != 'sort') {
+      dispatch(setFilters({...filters, [filter]: filter == 'colors' ? [] : ''}))
+    }
+  }
 
   return (
     <CatalogFilterStyled>
@@ -52,17 +70,21 @@ const CatalogFilters = () => {
               <option value="price-DESC">Price high to low</option>
             </select>
           </div>
-          <div className="products__quantity">{products.length} products</div>
+          <div className="products__quantity">{products?.length} products</div>
         </div>
       </div>
       <FiltersTypesStyled>
-        <SingleFilterStyled>
-          inStock <IoIosClose/>
-        </SingleFilterStyled>
-        <SingleFilterStyled>
-          inStock <IoIosClose/>
-        </SingleFilterStyled>
-        <button>Clear all</button>
+        {
+          Object.keys(filters)?.map(key => {
+            let filter = filters[key]
+            if(filter != null && filter != '' && filter != [] && key != 'typeId' && key != 'sort') {
+              return <SingleFilterStyled key={key}>
+                {key} <IoIosClose onClick={() => handleRemoveFilter(key)}/>
+              </SingleFilterStyled>
+            }
+          })
+        }
+        <button style={{ padding: 0, fontSize: 12 }} onClick={handleReset}>Clear all</button>
       </FiltersTypesStyled>
     </CatalogFilterStyled>
   );
@@ -71,7 +93,6 @@ const CatalogFilters = () => {
 export default CatalogFilters;
 
 const FiltersTypesStyled = styled.div`
-  background:yellow;
   width:100%;
   display:flex;
   justify-content:flex-start;
@@ -92,17 +113,19 @@ const FiltersTypesStyled = styled.div`
 const SingleFilterStyled = styled.div`
   background: white;
     color: #121212bf;
-    border: 1px solid #121212bf;
-    padding: 1px 7px;
+    border: 1px solid gray;
+    padding: 5px 10px;
     border-radius: 17px;
-    font-size: 9px;
-    padding-right:15px;
+    font-size: 12px;
     position:relative;
     cursor:pointer;
-  &>svg{
-    font-size:15px;
-    position:absolute;
-    top: 0px;
+    dispaly: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    &>svg {
+      font-size: 16px;
+    }
   }
 
 `
@@ -113,7 +136,6 @@ const CatalogFilterStyled = styled.div`
   justify-content: center;
   font-size: 14px;
   color: rgb(18, 18, 18, 0.75);
-  background:red;
   flex-direction:column;
 
   .catalogFilters-content {

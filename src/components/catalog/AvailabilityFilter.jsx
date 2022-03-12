@@ -3,7 +3,6 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { useRef } from "react";
 import { useOnClickOutside } from "../../hooks/uiHooks";
-import { getStockProduct } from "../../api";
 import { setCatalog, setFilters } from "../../redux/actions/catalogActions";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 const AvailabilityFilter = () => {
   const ref = useRef();
   const dispatch = useDispatch();
+  const [selectedNum, setSelectedNum] = useState(0);
 
   useOnClickOutside(ref, () => setShow(false));
   const [show, setShow] = useState(false);
@@ -22,7 +22,6 @@ const AvailabilityFilter = () => {
 
 
   useEffect(() => {
-
         if ((inStock && notInStock) || (!inStock && !notInStock)) {
           dispatch(setFilters({...filters, stock:""}));
 
@@ -32,9 +31,25 @@ const AvailabilityFilter = () => {
           dispatch(setFilters({...filters, stock:"out"}));
         } 
 
-
+        if(inStock && notInStock) {
+          setSelectedNum(2)
+        } else if(!inStock && !notInStock) {
+          setSelectedNum(0)
+        } else {
+          setSelectedNum(1)
+        }
   }, [inStock, notInStock]);
 
+  const handleReset = () => {
+    setInStock(false)
+    setNotInStock(false)
+    if(document.getElementById('inStock')) {
+      document.getElementById('inStock').checked = false
+    }
+    if(document.getElementById('outOfStock')) {
+      document.getElementById('outOfStock').checked = false
+    }
+  }
 
   return (
     <AvailabilityFilterStyled>
@@ -46,19 +61,29 @@ const AvailabilityFilter = () => {
       {show && (
         <div className="filter__items" ref={ref}>
           <div className="filter__items-header">
-            <div className="filter__items-selected">0 selected</div>
-            <div className="filter__items-reset">
+            <div className="filter__items-selected">{selectedNum} selected</div>
+            <div className="filter__items-reset" onClick={handleReset}>
               <span>Reset</span>
             </div>
           </div>
           <div className="filter__items-body">
             <div className="filter__item">
-              <input type="checkbox" onChange={e=>setInStock(e.target.checked)}  defaultChecked={filters.stock=="in"}/> In
-              Stock
+              <input
+                id="inStock"
+                type="checkbox"
+                onChange={e=>setInStock(e.target.checked)}
+                defaultChecked={filters.stock=="in"}
+              /> 
+              <label htmlFor="inStock">In Stock</label>
             </div>
             <div className="filter__item">
-              <input type="checkbox" onChange={e=>setNotInStock(e.target.checked)} defaultChecked={filters.stock=="out"}/> Out of
-              stock
+              <input
+                id="outOfStock"
+                type="checkbox"
+                onChange={e=>setNotInStock(e.target.checked)}
+                defaultChecked={filters.stock=="out"}
+              />
+              <label htmlFor="outOfStock">Out of stock</label>
             </div>
           </div>
         </div>

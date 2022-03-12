@@ -5,14 +5,13 @@ const initialState = {
   activeCategory:"",
   searchQuery:"",
   filters:{
-  priceFrom: '',
-  priceTo: '',
-  stock: '',
-  color: '',
-  typeId: null,
-  sort:''
-
-},
+    priceFrom: '',
+    priceTo: '',
+    stock: '',
+    colors: [],
+    typeId: null,
+    sort:''
+  },
   colors:""
 };
 

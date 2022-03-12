@@ -12,10 +12,17 @@ const PriceFilter = () => {
   useOnClickOutside(ref, () => setShow(false));
   const [show, setShow] = useState(false);
 
-
   const filters = useSelector(state=>state.catalog.filters)
 
-
+  const handleReset = () => {
+    dispatch(setFilters({...filters, priceFrom: '', priceTo: ''}))
+    if(document.getElementById('priceFromInput')) {
+      document.getElementById('priceFromInput').value = 0
+    }
+    if(document.getElementById('priceToInput')) {
+      document.getElementById('priceToInput').value = 0
+    }
+  }
 
   return (
     <PriceFilterStyled>
@@ -27,20 +34,36 @@ const PriceFilter = () => {
         <div className="filter__items" ref={ref}>
           <div className="filter__items-header">
             <div className="filter__items-selected">
-              The highest price is $615.00
+              The highest price is $1500.00
             </div>
-            <div className="filter__items-reset">
+            <div className="filter__items-reset" onClick={handleReset}>
               <span>Reset</span>
             </div>
           </div>
           <div className="filter__items-body">
             <div className="filter__input-price">
               <span>$</span>
-              <input type="number" placeholder="From" min={0} value={filters.priceFrom} onChange={e=>dispatch(setFilters({...filters, priceFrom:e.target.value}))}/>
+              <input
+                id="priceFromInput"
+                type="number"
+                placeholder="From"
+                min={0}
+                max={15000}
+                value={filters.priceFrom}
+                onChange={e=>dispatch(setFilters({...filters, priceFrom:e.target.value}))}
+              />
             </div>
             <div className="filter__input-price">
               <span>$</span>
-              <input type="number" placeholder="To" min={0} value={filters.priceTo} onChange={e=>dispatch(setFilters({...filters, priceTo:e.target.value}))}/>
+              <input
+                id="priceToInput"
+                type="number"
+                placeholder="To"
+                min={0}
+                max={15000}
+                value={filters.priceTo}
+                onChange={e=>dispatch(setFilters({...filters, priceTo:e.target.value}))}
+              />
             </div>
           </div>
         </div>

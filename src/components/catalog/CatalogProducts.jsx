@@ -1,45 +1,49 @@
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { getAllColors, getProducts } from '../../api';
 import { setAllColors, setCatalog } from '../../redux/actions/catalogActions';
 
-
 const CatalogProducts = () => {
+    const navigation = useNavigate();
     const dispatch = useDispatch();
     const products = useSelector(state=>state.catalog.catalog);
     const searchValue = useSelector(state=>state.catalog.searchQuery);
     const filters = useSelector(state=>state.catalog.filters);
     let searched = products.filter(item => item.title?.toLowerCase().includes(searchValue?.toLowerCase()));
     
-
+    useEffect(()=>{
+        getProducts(filters)
+        .then(res=>dispatch(setCatalog(res.data)))
+        .catch(error => console.log(error))
+    }, [filters])
 
     useEffect(()=>{
-        
-        getProducts(filters).then(res=>dispatch(setCatalog(res.data)));
-        console.log(products);
-      },[filters])
-
-    useEffect(()=>{
-        getAllColors().then(res=>dispatch(setAllColors(res.data)))
-    },[])
-
-
+        getAllColors()
+        .then(res=>dispatch(setAllColors(res.data)))
+        .catch(error => console.log(error))
+    }, [])
 
     return <CatalogProductsStyled>
         <GridContainer>
-            {searched && searched.map(product=>  <Item key={product.productId}>
-                            <ImageContainer>
-                                <Image src={product.img} />
-                                {product.sale && <Sale>Sale</Sale>}
-                            </ImageContainer>
-                            <Content>
-                                <Title>{product.title}</Title>
-                                <Price>$ {product.price} CAD</Price>
-                            </Content>
-                        </Item>
+            {
+                searched &&
+                searched.map(product => <Item
+                    key={product?.productId}
+                    onClick={() => navigation(`/product/${product?.productId}`)}
+                >
+                    <ImageContainer>
+                        <Image src={product?.img} />
+                        {product?.sale && <Sale>Sale</Sale>}
+                    </ImageContainer>
+                    <Content>
+                        <Title>{product?.title}</Title>
+                        <Price>$ {product?.price} CAD</Price>
+                    </Content>
+                </Item>
             )}
-                        </GridContainer>
+        </GridContainer>
     </CatalogProductsStyled>
 }
 

@@ -14,11 +14,25 @@ const FiltersBurger = ({ showFiltersBurger, setShowFiltersBurger }) => {
   const [selectValue, setSelectValue] = useState("");
   const dispatch = useDispatch();
   const filters = useSelector(state=>state.catalog.filters);
+  const products = useSelector(state=>state.catalog.catalog);
 
   const handleSortChange = (e) => {
     setSelectValue(e.target.value);
     dispatch(setFilters({...filters, sort:e.target.value}))
   };
+
+  const handleReset = () => {
+    dispatch(setFilters({
+      priceFrom: '',
+      priceTo: '',
+      stock: '',
+      colors: [],
+      typeId: null,
+      sort:''
+    }))
+    setShowFiltersBurger(false)
+  }
+
   return (
     <>
       <Offcanvas
@@ -34,7 +48,7 @@ const FiltersBurger = ({ showFiltersBurger, setShowFiltersBurger }) => {
         />
         <Header>
           <h3>Filter and sort</h3>
-          <p>26 products</p>
+          <p>{ products ? products?.length : 0 } products</p>
           <AiOutlineClose
             className="close-filtersBurger"
             onClick={setShowFiltersBurger}
@@ -83,10 +97,10 @@ const FiltersBurger = ({ showFiltersBurger, setShowFiltersBurger }) => {
         </Body>
         <Footer>
           <div className="btn">
-            <button>Clear all</button>
+            <button onClick={handleReset}>Clear all</button>
           </div>
           <div className="btn">
-            <button>Apply</button>
+            <button onClick={() => setShowFiltersBurger(false)}>Apply</button>
           </div>
         </Footer>
       </Offcanvas>

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { API } from '../utils/API';
 import CartItem from './CartItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCart } from "../redux/actions/cartActions"
+import { setCart } from "../redux/actions/cartActions";
+import { fetchCartProducts } from '../api';
 
 const Container = styled.div`
     width: 100%;
@@ -94,25 +94,13 @@ const Button = styled.button`
 `;
 
 const CartComponent = () => {
-
     const dispatch = useDispatch();
     const cartProducts = useSelector(state => state.cart.cart);
 
     useEffect(() => {
-
-        const fetchProducts = async () => {
-            try {
-                const url = `/cart`;
-                const response = await API.get(url)
-                    .then(res => {
-                        dispatch(setCart(res.data));
-                    })
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
-        fetchProducts();
+        fetchCartProducts()
+        .then(res => dispatch(setCart(res.data)))
+        .catch(error => console.log(error))
     }, []);
 
     return (
