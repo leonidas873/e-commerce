@@ -1,8 +1,9 @@
 import { BsArrowRight } from "react-icons/bs";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import {useSelector, useDispatch} from 'react-redux';
+import { setFilters } from "../../redux/actions/catalogActions";
 
 // styled components
 
@@ -106,21 +107,44 @@ const ColorOption = styled.div`
 
 
 const AvailabilityContent = () => {
+  const filters = useSelector(state=>state.catalog.filters);
+  const [inStock, setInStock] = useState(filters.stock=="in");
+  const [notInStock, setNotInStock] = useState(filters.stock=="out");
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+
+        if ((inStock && notInStock) || (!inStock && !notInStock)) {
+          dispatch(setFilters({...filters, stock:""}));
+          
+        } else if (inStock){
+          dispatch(setFilters({...filters, stock:"in"}));
+        } else if (notInStock){
+          dispatch(setFilters({...filters, stock:"out"}));
+        } 
+
+
+  }, [inStock, notInStock]);
+
 
 return <AvailabilityBodyStyled>
-<AvailabilityOption><input type="checkbox" /> In Stock</AvailabilityOption>
-    <AvailabilityOption><input type="checkbox" /> Out of stock</AvailabilityOption>
+<AvailabilityOption><input type="checkbox" onChange={e=>setInStock(e.target.checked)} defaultChecked={filters.stock=="in"} /> In Stock</AvailabilityOption>
+    <AvailabilityOption><input type="checkbox" onChange={e=>setNotInStock(e.target.checked)} defaultChecked={filters.stock=="out"}/> Out of stock</AvailabilityOption>
 </AvailabilityBodyStyled>
 }
 
 
 const PriceContent = () => {
 
+  const filters = useSelector(state=>state.catalog.filters);
+  const dispatch = useDispatch();
+
   return <PriceBodyStyled>
-    <h5>The highest price is $615.00</h5>
+    <h5>The highest price is $15000.00</h5>
     <div className="inputs">
-    <PriceInput>$ <input type="number" placeholder="From"/></PriceInput>
-      <PriceInput>$ <input type="number" placeholder="To"/></PriceInput>
+    <PriceInput>$ <input type="number" placeholder="From" value={filters.priceFrom} onChange={e=>dispatch(setFilters({...filters, priceFrom:e.target.value}))}/></PriceInput>
+      <PriceInput>$ <input type="number" placeholder="To" value={filters.priceTo} onChange={e=>dispatch(setFilters({...filters, priceTo:e.target.value}))}/></PriceInput>
       </div>
   </PriceBodyStyled>
   }
@@ -128,9 +152,31 @@ const PriceContent = () => {
 
 
   const ColorContent = () => {
-const colors = ["black", "red", "white", "blue",1,2,3,4,5,1,2,3,41,2,31,23,123,12,31,23,1,3];
+
+    const dispatch = useDispatch();
+    const filters = useSelector(state=>state.catalog.filters);
+    const colors = useSelector(state=>state.catalog.colors);
+
+
     return <ColorBodyStyled>
-    {colors.map(color =><ColorOption><input type="checkbox" /> {color}</ColorOption>)}
+    {colors.map((color, index )=><ColorOption key={index}><input
+                  type="checkbox"
+                  name="color"
+                  value={color}
+                  checked={filters.colors?.includes(color)}
+                  onChange={(e) => {
+                    if(e.target.checked) {
+                      dispatch(setFilters({ ...filters, colors: [...filters.colors, color] }))
+                    } else {
+                      let colorsArray = filters.colors
+                      let index = colorsArray.indexOf(color)
+                      if(index > -1) {
+                        colorsArray.splice(index, 1)
+                      }
+                      dispatch(setFilters({ ...filters, colors: [...colorsArray] }))
+                    }
+                  }}
+                /> {color}</ColorOption>)}
     </ColorBodyStyled>
     }  
 

@@ -1,39 +1,49 @@
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from "react";
-import { getAllProducts } from '../../api';
-import { setCatalog } from '../../redux/actions/catalogActions';
-
+import { useNavigate } from 'react-router-dom';
+import { getAllColors, getProducts } from '../../api';
+import { setAllColors, setCatalog } from '../../redux/actions/catalogActions';
 
 const CatalogProducts = () => {
+    const navigation = useNavigate();
     const dispatch = useDispatch();
     const products = useSelector(state=>state.catalog.catalog);
-
+    const searchValue = useSelector(state=>state.catalog.searchQuery);
+    const filters = useSelector(state=>state.catalog.filters);
+    let searched = products.filter(item => item.title?.toLowerCase().includes(searchValue?.toLowerCase()));
     
     useEffect(()=>{
+        getProducts(filters)
+        .then(res=>dispatch(setCatalog(res.data)))
+        .catch(error => console.log(error))
+    }, [filters])
 
-        getAllProducts().then(res=>dispatch(setCatalog(res.data)))
-      
-      },[])
-
-
-
-
+    useEffect(()=>{
+        getAllColors()
+        .then(res=>dispatch(setAllColors(res.data)))
+        .catch(error => console.log(error))
+    }, [])
 
     return <CatalogProductsStyled>
         <GridContainer>
-            {products && products.map(product=>  <Item key={product.productId}>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-art-deco-cyclamen-1_ec8e69b6-92ea-4c48-b8b6-34601cf3c070_360x.jpg?v=1637106934' />
-                                <Sale>Sale</Sale>
-                            </ImageContainer>
-                            <Content>
-                                <Title>{product.title}</Title>
-                                <Price>$ {product.price} CAD</Price>
-                            </Content>
-                        </Item>
+            {
+                searched &&
+                searched.map(product => <Item
+                    key={product?.productId}
+                    onClick={() => navigation(`/product/${product?.productId}`)}
+                >
+                    <ImageContainer>
+                        <Image src={product?.img} />
+                        {product?.sale && <Sale>Sale</Sale>}
+                    </ImageContainer>
+                    <Content>
+                        <Title>{product?.title}</Title>
+                        <Price>$ {product?.price} CAD</Price>
+                    </Content>
+                </Item>
             )}
-                        </GridContainer>
+        </GridContainer>
     </CatalogProductsStyled>
 }
 
@@ -65,6 +75,8 @@ const ImageContainer = styled.div`
     width: 100%;
     position: relative;
     overflow: hidden;
+    height: 280px;
+
 `;
 
 const Image = styled.img`

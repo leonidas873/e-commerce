@@ -1,39 +1,50 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./header.css";
 import BurgerMenuItemDrawer from "./BurgerMenuItemDrawer";
 import { BsArrowRight } from "react-icons/bs";
-import { useState } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import {AiOutlineTwitter, AiFillFacebook, AiFillInstagram, AiFillYoutube} from 'react-icons/ai'
 import {SiTiktok} from 'react-icons/si';
 import { Offcanvas } from "react-bootstrap";
 
 
-const BurgerMenu = ({ showBurgerMenu, categories, setShowBurgerMenu }) => {
-  
+const BurgerMenu = ({
+  showBurgerMenu,
+  categories,
+  setShowBurgerMenu,
+  setTypeId
+}) => {
   const [activeBurgerItem, setActiveBurgerItem] = useState("");
-
 
   return (<>
     <Offcanvas show={showBurgerMenu} onHide={setShowBurgerMenu} className="burgerDrawer" backdropClassName="burgerDrawer__bg">
     <div className="burger__menu-items">
             <BurgerMenuItemDrawer
-              name={categories.shoes.name}
-              subCategories={categories.shoes.subCategories}
+              name='shoes'
+              subCategories={categories.shoes}
               activeBurgerItem={activeBurgerItem}
               hideBurgerItemDrawer={() => setActiveBurgerItem("")}
+              setTypeId={setTypeId}
+              setShowBurgerMenu={setShowBurgerMenu}
             />
             <BurgerMenuItemDrawer
-              name={categories.bags.name}
-              subCategories={categories.bags.subCategories}
+              name='bags'
+              subCategories={categories.bags}
               activeBurgerItem={activeBurgerItem}
               hideBurgerItemDrawer={() => setActiveBurgerItem("")}
+              setTypeId={setTypeId}
+              setShowBurgerMenu={setShowBurgerMenu}
             />
             <div className="burger__menu-item">
               <div
                 className="burger__menu-item__title"
-                onClick={() => setActiveBurgerItem(categories.bags.name)}
+                onClick={() => {
+                  setTypeId('bags')
+                  setActiveBurgerItem('bags')
+                }}
               >
-                {categories.bags.name}
+                Bags
                 <BsArrowRight />
               </div>
             </div>
@@ -41,19 +52,25 @@ const BurgerMenu = ({ showBurgerMenu, categories, setShowBurgerMenu }) => {
             <div className="burger__menu-item">
               <div
                 className="burger__menu-item__title"
-                onClick={() => setActiveBurgerItem(categories.shoes.name)}
+                onClick={() => {
+                  setTypeId('shoes')
+                  setActiveBurgerItem('shoes')
+                }}
               >
-                {categories.shoes.name}
+                Shoes
                 <BsArrowRight />
               </div>
             </div>
-
-            <div className="burger__menu-item__title">Lookbook</div>
+            <Link to="/lookbook" className="burger__menu-item__title">
+              <div onClick={() => setShowBurgerMenu(false)}>
+                Lookbook
+              </div>
+            </Link>
           </div>
           <div className="burgerMenu__footer">
             <div className="burgerMenu__login">
-<AiOutlineUser/>
-<div>Log in</div>
+              <AiOutlineUser/>
+              <div>Log in</div>
             </div>
             <div className="burgerMenu__logos">
               <AiOutlineTwitter/>

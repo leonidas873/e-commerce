@@ -1,5 +1,7 @@
-import React from 'react';
+import React,  { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { getSortedProducts } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     width: 100%;
@@ -38,6 +40,10 @@ const ImageContainer = styled.div`
     width: 100%;
     position: relative;
     overflow: hidden;
+    max-height: 260px;
+    @media screen and (max-width: 991px){
+        height: 180px;
+    }
 `;
 
 const Image = styled.img`
@@ -118,51 +124,42 @@ const Button = styled.button`
 `;
 
 const FeaturedCollection = () => {
+    const [featuredProducts, setFeaturedProducts] = useState([])
+    const navigation = useNavigate()
+
+    useEffect(() => {
+        getSortedProducts()
+        .then(res => setFeaturedProducts(res.data?.filter((_, index) => index< 4)))
+        .catch(error => console.log(error))
+    }, [])
+
     return (
         <>
             <Container>
                 <Wrapper>
                     <Header>Featured Collection</Header>
                     <GridContainer>
-                        <Item>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-art-deco-cyclamen-1_ec8e69b6-92ea-4c48-b8b6-34601cf3c070_360x.jpg?v=1637106934' />
-                                <Sale>Sale</Sale>
-                            </ImageContainer>
-                            <Content>
-                                <Title>Art Deco</Title>
-                                <Price>$ 165.00 CAD</Price>
-                            </Content>
-                        </Item>
-                        <Item>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-bo-ivy-emerald-1_73c3987e-5ec7-4e72-879a-2ba2e560648f_360x.jpg?v=1637107948' />
-                            </ImageContainer>
-                            <Content>
-                                <Title>Bo Ivy</Title>
-                                <Price>$ 390 CAD</Price>
-                            </Content>
-                        </Item>
-                        <Item>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-bo-soft-strap-brown-1_360x.jpg?v=1637107682' />
-                            </ImageContainer>
-                            <Content>
-                                <Title>Bo Soft Strap</Title>
-                                <Price>$ 365 CAD</Price>
-                            </Content>
-                        </Item>
-                        <Item>
-                            <ImageContainer>
-                                <Image src='https://cdn.shopify.com/s/files/1/0551/9242/0441/products/mlouye-brick-oil-yellow-1_360x.jpg?v=1637107420' />
-                            </ImageContainer>
-                            <Content>
-                                <Title>Brick</Title>
-                                <Price>$ 385 CAD</Price>
-                            </Content>
-                        </Item>
+                        {
+                            featuredProducts?.map(product => (
+                                <Item>
+                                    <ImageContainer>
+                                        <Image src={product?.img} />
+                                        {
+                                            product?.sale &&
+                                            <Sale>Sale</Sale>
+                                        }
+                                    </ImageContainer>
+                                    <Content>
+                                        <Title>
+                                            {product?.title}
+                                        </Title>
+                                        <Price>$ {product?.price}.00 CAD</Price>
+                                    </Content>
+                                </Item>
+                            ))
+                        }
                     </GridContainer>
-                    <Button>View all</Button>
+                    <Button onClick={() => navigation(`/catalog/all-shoes`)}>View all</Button>
                 </Wrapper>
             </Container>
         </>

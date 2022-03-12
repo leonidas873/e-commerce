@@ -4,9 +4,8 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BsArrowRight } from "react-icons/bs";
 import styled from "styled-components";
 import FilterBurgerSubDrawer from "./FilterBurgerSubDrawer";
-import { getSortedProducts } from "../../api";
-import { useDispatch } from "react-redux";
-import { setCatalog } from "../../redux/actions/catalogActions";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilters } from "../../redux/actions/catalogActions";
 
 
 const FiltersBurger = ({ showFiltersBurger, setShowFiltersBurger }) => {
@@ -14,20 +13,33 @@ const FiltersBurger = ({ showFiltersBurger, setShowFiltersBurger }) => {
   const [show, setShow] = useState(false);
   const [selectValue, setSelectValue] = useState("");
   const dispatch = useDispatch();
+  const filters = useSelector(state=>state.catalog.filters);
+  const products = useSelector(state=>state.catalog.catalog);
 
   const handleSortChange = (e) => {
     setSelectValue(e.target.value);
-    getSortedProducts(e.target.value).then((res) =>{
-      dispatch(setCatalog(res.data));
-    }
-    );
+    dispatch(setFilters({...filters, sort:e.target.value}))
   };
+
+  const handleReset = () => {
+    dispatch(setFilters({
+      priceFrom: '',
+      priceTo: '',
+      stock: '',
+      colors: [],
+      typeId: null,
+      sort:''
+    }))
+    setShowFiltersBurger(false)
+  }
+
   return (
     <>
       <Offcanvas
         show={showFiltersBurger}
         placement="end"
         onHide={setShowFiltersBurger}
+        
       >
         <FilterBurgerSubDrawer
           show={show}
@@ -36,7 +48,7 @@ const FiltersBurger = ({ showFiltersBurger, setShowFiltersBurger }) => {
         />
         <Header>
           <h3>Filter and sort</h3>
-          <p>26 products</p>
+          <p>{ products ? products?.length : 0 } products</p>
           <AiOutlineClose
             className="close-filtersBurger"
             onClick={setShowFiltersBurger}
@@ -73,7 +85,7 @@ const FiltersBurger = ({ showFiltersBurger, setShowFiltersBurger }) => {
           <div className="filterBurger__filter">
             sort by:{" "}
             <div className="sort__wrapper">
-            <select value={selectValue} onChange={handleSortChange}>
+            <select defaultValue={filters.sort} onChange={handleSortChange}>
               <option value="">Featured</option>
               <option value="alph-AZ">Alphabetically A-Z</option>
               <option value="alph-ZA">Alphabetically Z-A</option>
@@ -85,10 +97,10 @@ const FiltersBurger = ({ showFiltersBurger, setShowFiltersBurger }) => {
         </Body>
         <Footer>
           <div className="btn">
-            <button>Clear all</button>
+            <button onClick={handleReset}>Clear all</button>
           </div>
           <div className="btn">
-            <button>Apply</button>
+            <button onClick={() => setShowFiltersBurger(false)}>Apply</button>
           </div>
         </Footer>
       </Offcanvas>

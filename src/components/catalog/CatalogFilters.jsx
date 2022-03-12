@@ -1,25 +1,43 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { BsSliders } from "react-icons/bs";
 import AvailabilityFilter from "./AvailabilityFilter";
 import PriceFilter from "./PriceFilter";
 import ColorFilter from "./ColorFilter";
-import { useState } from "react";
 import FiltersBurger from "./FiltersBurger";
-import { setCatalog } from "../../redux/actions/catalogActions";
-import { useDispatch } from "react-redux";
-import { getSortedProducts } from "../../api";
+import { setFilters } from "../../redux/actions/catalogActions";
+import {IoIosClose} from "react-icons/io";
 
 const CatalogFilters = () => {
   const dispatch = useDispatch();
+  const products = useSelector(state=>state.catalog.catalog)
   const [showFiltersBurger, setShowFiltersBurger] = useState(false);
   const [selectValue, setSelectValue] = useState("");
+  const filters = useSelector(state=>state.catalog.filters);
+
   const handleSortChange = (e) => {
     setSelectValue(e.target.value);
-    getSortedProducts(e.target.value).then((res) =>{
-      dispatch(setCatalog(res.data));
-    }
-    );
+    dispatch(setFilters({...filters, sort:e.target.value}))
   };
+
+  const handleReset = () => {
+    dispatch(setFilters({
+      priceFrom: '',
+      priceTo: '',
+      stock: '',
+      colors: [],
+      typeId: null,
+      sort:''
+    }))
+  }
+
+  const handleRemoveFilter = filter => {
+    console.log(filter, '----filter')
+    if(filter !=  'typeId' && filter != 'sort') {
+      dispatch(setFilters({...filters, [filter]: filter == 'colors' ? [] : ''}))
+    }
+  }
 
   return (
     <CatalogFilterStyled>
@@ -44,7 +62,7 @@ const CatalogFilters = () => {
         <div className="catalogFilters-right">
           <div className="catalogFilters-right__title">Sort by:</div>
           <div className="catalogFilters-right__select">
-            <select value={selectValue} onChange={handleSortChange}>
+            <select defaultValue={filters.sort} onChange={handleSortChange}>
               <option value="">Featured</option>
               <option value="alph-AZ">Alphabetically A-Z</option>
               <option value="alph-ZA">Alphabetically Z-A</option>
@@ -52,14 +70,65 @@ const CatalogFilters = () => {
               <option value="price-DESC">Price high to low</option>
             </select>
           </div>
-          <div className="products__quantity">26 products</div>
+          <div className="products__quantity">{products?.length} products</div>
         </div>
       </div>
+      <FiltersTypesStyled>
+        {
+          Object.keys(filters)?.map(key => {
+            let filter = filters[key]
+            if(filter != null && filter != '' && filter != [] && key != 'typeId' && key != 'sort') {
+              return <SingleFilterStyled key={key}>
+                {key} <IoIosClose onClick={() => handleRemoveFilter(key)}/>
+              </SingleFilterStyled>
+            }
+          })
+        }
+        <button style={{ padding: 0, fontSize: 12 }} onClick={handleReset}>Clear all</button>
+      </FiltersTypesStyled>
     </CatalogFilterStyled>
   );
 };
 
 export default CatalogFilters;
+
+const FiltersTypesStyled = styled.div`
+  width:100%;
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+  max-width: 1200px;
+  padding: 0 50px;
+  gap:10px;
+
+  & >  button{
+    border:none;
+    background:transparent;
+    outline:none;
+    font-size: 9px;
+    border-bottom:1px solid #121212bf; 
+  }
+`
+
+const SingleFilterStyled = styled.div`
+  background: white;
+    color: #121212bf;
+    border: 1px solid gray;
+    padding: 5px 10px;
+    border-radius: 17px;
+    font-size: 12px;
+    position:relative;
+    cursor:pointer;
+    dispaly: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    &>svg {
+      font-size: 16px;
+    }
+  }
+
+`
 
 const CatalogFilterStyled = styled.div`
   display: flex;
@@ -67,7 +136,7 @@ const CatalogFilterStyled = styled.div`
   justify-content: center;
   font-size: 14px;
   color: rgb(18, 18, 18, 0.75);
-  /* margin:20px 0px; */
+  flex-direction:column;
 
   .catalogFilters-content {
     display: flex;

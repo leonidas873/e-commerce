@@ -13,3 +13,4 @@ export const setUpdatedCart = (products) => {
         payload: products
     }
 }
+

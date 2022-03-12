@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import {useDispatch} from 'react-redux';
 import { setActiveCategory } from "../../redux/actions/catalogActions";
 
-const HeaderMenuDropDown = ({ name, items }) => {
+const HeaderMenuDropDown = ({ name, types, setTypeId }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dispatch = useDispatch();
 
@@ -18,6 +18,7 @@ const HeaderMenuDropDown = ({ name, items }) => {
         }
         onClick={() => {
           setShowDropdown(!showDropdown);
+          setTypeId(name?.toLowerCase())
         }}
       >
         <span>{name}</span>
@@ -35,8 +36,12 @@ const HeaderMenuDropDown = ({ name, items }) => {
       )}
       {showDropdown && (
         <div className="header-dropdown__items">
-          {items.map((item, index) => (
-            <Link key={index} to={`/catalog/${item.route}`}><div className="header-dropdown__item" onClick={()=>dispatch((setActiveCategory(name)))}>{item.value}</div></Link>
+          {types.map((item, index) => (
+            <Link key={index} to={`/catalog/${item?.route}`}>
+              <div className="header-dropdown__item" onClick={()=>{dispatch((setActiveCategory(name))); setTypeId(item?.typeId)}}>
+                {item?.typeName}
+              </div>
+            </Link>
           ))}
         </div>
       )}
