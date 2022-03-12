@@ -87,3 +87,42 @@ export const getColors = ()=> {
     throw new Error(err)
   }
 }
+
+// fetching filtered data
+
+export const getStockProduct = async stockType => {
+  // in - სტოკშია, out - არაა სტოკში
+  try {
+    return axios.get(`${SERVER_URL}/products/`, {params: {stock: stockType}})
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+export const getFilteredByPrice = async stockType => {
+  // in - სტოკშია, out - არაა სტოკში
+  try {
+    return axios.get(`${SERVER_URL}/products/`, {params: {stock: stockType}})
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+//  get all colors
+
+export const getAllColors = async () => {
+  try {
+    let result = axios.get(`${SERVER_URL}/colors`);
+    return result;
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+export const getProducts = async (filters) => {
+  try {
+    return axios.get(`${SERVER_URL}/products`, {params: filters});
+  } catch (err) {
+    throw new Error(err)
+  }
+}
