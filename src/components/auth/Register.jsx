@@ -119,22 +119,22 @@ const RegisterStyled = styled.div`
   align-items: center;
   flex-direction:column;
 
-.register__validation h5{
-font-size:22px;
-line-height:1;
-display:flex;
-align-items:center;
-gap:5px;
-}
-.register__validation h5 svg{
-  color:red;
-}
-.register__validation ul li {
-font-size:16px;
-color:#121212BF;
-list-style-type:disc;
-list-style-position: inside;
-}
+  .register__validation h5{
+    font-size:22px;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+  .register__validation h5 svg{
+    color:red;
+  }
+  .register__validation ul li {
+    font-size:16px;
+    color:#121212BF;
+    list-style-type:disc;
+    list-style-position: inside;
+  }
   .error-message{
     font-size:14px;
     color:red;

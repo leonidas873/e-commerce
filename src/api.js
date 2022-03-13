@@ -22,6 +22,22 @@ export const register = async (values) => {
   }
 };  
 
+export const requestResetPassword = async email => {
+  try {
+    return await axios.post(`${SERVER_URL}/auth/forgot-password`, {email});
+  } catch (err) {
+    throw err.response.status;
+  } 
+}
+
+export const resetPassword = async data => {
+  try {
+    return await axios.put(`${SERVER_URL}/auth/reset-password`, {...data});
+  } catch (err) {
+    throw err.response.data;
+  }  
+}
+
 export const subscribe = async (email) => {
   try {
     let result = await axios.post(`${SERVER_URL}/sub`, {email});  
