@@ -23,6 +23,7 @@ const Header = () => {
   const [types, setTypes] = useState([]);
   const [typeId, setTypeId] = useState(null);
   const filters = useSelector((state) => state.catalog.filters);
+  const cart = useSelector(state => state.cart.cart );
 
   const handleCloseBurgerMenu = () => setShowBurgerMenu(false);
   const handleShowBurgerMenu = () => setShowBurgerMenu(true);
@@ -95,7 +96,8 @@ const Header = () => {
         <div className="header-col">
           <div className="header__icons">
             <IoSearchOutline onClick={handleShowSearch} />
-            <BsBag onClick={() => navigate("/cart")} />
+            <div className={"cart__icon"}><BsBag onClick={() => navigate("/cart")} />{(cart && !!cart.length) && <span
+                className={"cart__products-qty"}>{cart.length}</span>}</div>
             {!login ? (
               <AiOutlineUser onClick={() => navigate("/login")} />
             ) : (
@@ -150,6 +152,26 @@ const Header = () => {
 export default Header;
 
 const HeaderStyled = styled.div`
+  
+  .cart__icon{
+    position:relative;
+  }
+  
+  .cart__products-qty{
+    border-radius: 50%;
+    background: black;
+    color: white;
+    font-size: 12px;
+    top: 13px;
+    left: 13px;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
   & {
     background-color: white;
     display: flex;

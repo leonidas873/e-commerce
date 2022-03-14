@@ -33,7 +33,7 @@ const CatalogFilters = () => {
   }
 
   const handleRemoveFilter = filter => {
-    console.log(filter, '----filter')
+
     if(filter !=  'typeId' && filter != 'sort') {
       dispatch(setFilters({...filters, [filter]: filter == 'colors' ? [] : ''}))
     }
@@ -84,7 +84,9 @@ const CatalogFilters = () => {
             }
           })
         }
-        <button style={{ padding: 0, fontSize: 12 }} onClick={handleReset}>Clear all</button>
+        {(Object.keys(filters)?.filter(key=>
+            key != 'sort' && filters[key]?.length > 0
+        ).length !==0) && <button style={{padding: 0, fontSize: 12}} onClick={handleReset}>Clear all</button>}
       </FiltersTypesStyled>
     </CatalogFilterStyled>
   );

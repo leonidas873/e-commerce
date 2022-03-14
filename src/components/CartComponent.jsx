@@ -4,6 +4,7 @@ import CartItem from './CartItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCart } from "../redux/actions/cartActions";
 import { fetchCartProducts } from '../api';
+import {useNavigate} from "react-router-dom";
 
 const Container = styled.div`
     width: 100%;
@@ -96,6 +97,7 @@ const Button = styled.button`
 const CartComponent = () => {
     const dispatch = useDispatch();
     const cartProducts = useSelector(state => state.cart.cart);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchCartProducts()
@@ -109,12 +111,12 @@ const CartComponent = () => {
                 <Wrapper>
                     <Header>
                         <CartHeader>Your cart</CartHeader>
-                        <ContinueShopping>Continue Shopping</ContinueShopping>
+                        <ContinueShopping onClick = {()=> navigate("/catalog/shoes")}>Continue Shopping</ContinueShopping>
                     </Header>
                     {cartProducts?.length === 0 ?
                         <DisplayFlex>
-                            <EmptyTitle>Your cart is empty</EmptyTitle>
-                            <Button>Continue Shopping</Button>
+                            <EmptyTitle >Your cart is empty</EmptyTitle>
+                            <Button onClick = {()=> navigate("/catalog/shoes")}>Continue Shopping</Button>
                         </DisplayFlex>
                         :
                         <Table>

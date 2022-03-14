@@ -159,7 +159,7 @@ const FeaturedCollection = () => {
                             ))
                         }
                     </GridContainer>
-                    <Button onClick={() => navigation(`/catalog/all-shoes`)}>View all</Button>
+                    <Button onClick={() => navigation(`/catalog/bags`)}>View all</Button>
                 </Wrapper>
             </Container>
         </>
