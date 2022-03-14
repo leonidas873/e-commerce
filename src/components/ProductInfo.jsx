@@ -7,9 +7,10 @@ import { FaRuler } from 'react-icons/fa';
 import styled from "styled-components";
 import ImageGallery from 'react-image-gallery';
 import { Modal } from 'react-bootstrap';
-import { addToCart, getAllColors } from '../api';
+import {addToCart, fetchCartProducts, getAllColors} from '../api';
 import Loading from './loading/Loading';
-
+import {setCart} from "../redux/actions/cartActions";
+import {useDispatch} from "react-redux";
 
 const Container = styled.div`
     width: 100%;
@@ -256,6 +257,7 @@ const ProductInfo = ({ singleProduct }) => {
     const [scroll, setScroll] = useState(false);
     const [stopScrolling, setStopScrolling] = useState();
     const [imageStartIndex, setImageStartIndex] = useState(0);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         window.addEventListener("scroll", () => {
@@ -325,6 +327,7 @@ const ProductInfo = ({ singleProduct }) => {
                 setIsAdded(true)
                 setIsDisabled(false)
             }, 500)
+            fetchCartProducts().then(res=>dispatch(setCart(res.data)))
         })
         .catch(error => {
             if(error.response.status === 403) {

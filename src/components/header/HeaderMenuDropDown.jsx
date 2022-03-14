@@ -2,12 +2,13 @@ import styled from "styled-components";
 import { IoIosArrowDown } from "react-icons/io";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { setActiveCategory } from "../../redux/actions/catalogActions";
 
 const HeaderMenuDropDown = ({ name, types, setTypeId }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dispatch = useDispatch();
+
 
   return (
     <HeaderMenuDropDownStyled>
@@ -36,6 +37,7 @@ const HeaderMenuDropDown = ({ name, types, setTypeId }) => {
       )}
       {showDropdown && (
         <div className="header-dropdown__items">
+            <Link to={`/catalog/${name.toLowerCase()}`}><div className="header-dropdown__item" onClick={()=>{dispatch((setActiveCategory(name))); setTypeId(name.toLowerCase())}}>all {name}</div></Link>
           {types.map((item, index) => (
             <Link key={index} to={`/catalog/${item?.route}`}>
               <div className="header-dropdown__item" onClick={()=>{dispatch((setActiveCategory(name))); setTypeId(item?.typeId)}}>

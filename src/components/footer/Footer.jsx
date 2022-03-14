@@ -5,11 +5,13 @@ import {SiTiktok} from 'react-icons/si';
 import { subscribe } from '../../api';
 import { useState } from 'react';
 import Loading from '../loading/Loading'
+import {Link, useNavigate} from 'react-router-dom';
+
 
 const Footer = () => {
     const [email, setEmail] = useState('');
-    const [isLoading, setIsLoading] = useState(false)
-
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
     const handleSubscribe = () => {
         const reset = () => {
             setIsLoading(false)
@@ -37,9 +39,9 @@ const Footer = () => {
         <div className="footer-raw">
 <div className="footer-col">
     <div className='footer-col__title'>Quick links</div>
-    <div className="footer-col__item">Bags</div>
-    <div className="footer-col__item">Shoes</div>
-    <div className="footer-col__item">Lookbook</div>
+    <Link to={"/catalog/bags"}><div className="footer-col__item">Bags</div></Link>
+    <Link to={"/catalog/shoes"}><div className="footer-col__item">Shoes</div></Link>
+    <Link to={"/catalog/lookbook"}><div className="footer-col__item">Lookbook</div></Link>
 </div>
 <div className="footer-col">
 <div className='footer-col__title'>Info</div>
@@ -70,11 +72,11 @@ const Footer = () => {
         </div>
     </div>
     <div className="footer__logos">
-        <AiOutlineTwitter/>
-              <AiFillFacebook/>
-              <AiFillInstagram/>
-              <AiFillYoutube/>
-              <SiTiktok/>
+        <AiOutlineTwitter onClick={()=>window.location.href = 'http://www.twitter.com' }/>
+              <AiFillFacebook onClick={()=>window.location.href = 'http://www.facebook.com' }/>
+              <AiFillInstagram onClick={()=>window.location.href = 'http://www.instagram.com' }/>
+              <AiFillYoutube onClick={()=>window.location.href = 'http://www.youtube.com' }/>
+              <SiTiktok onClick={()=>window.location.href = 'https://www.tiktok.com' }/>
         </div>
 </div>
 </div>
@@ -109,6 +111,10 @@ max-width:1200px;
     justify-content:flex-start;
     align-items:flex-start;
 }
+  
+  .footer-col > a {
+    text-decoration:none;
+  }
 
 .footer-col__title{
     margin-bottom:20px;
