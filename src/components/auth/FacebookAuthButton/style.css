@@ -1,0 +1,34 @@
+.facebook-btn {
+    width: 184px;
+    height: 44px;
+    border-radius: 2px;
+    cursor: pointer;
+    color: white;
+    background-color: #121212;
+    margin: 0 auto 20px auto;
+    border: 2px solid white;
+    font-family: 'Assistant', sans-serif !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7.5px;
+}
+.facebook-btn:hover {
+    border: 2px solid black;
+}
+.facebook-btn:active {
+    background: #121212;
+}
+.facebook-icon {
+    margin-left: 5.5px;
+    width: 38px;
+    height: 38px;
+}
+.btn-text {
+    margin: 11px 11px 0 0;
+    color: white;
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: 0.1px;
+    transform: translateY(-4.5px);
+}

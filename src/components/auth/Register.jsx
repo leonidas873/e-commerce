@@ -1,20 +1,19 @@
 import styled from "styled-components";
 import MainLayout from "../../styles/MainLayout";
-import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {useState} from 'react';
 import {RiErrorWarningFill} from 'react-icons/ri'
 import { register } from "../../api";
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import FacebookButton from "./FacebookAuthButton/FacebookButton";
+import { GoogleLogin } from 'react-google-login';
+import GoogleButton from "./GoogleAuthButton/GoogleButton";
 
 const Register = () => {
-
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [invalidInputs, setInvalidInputs] = useState(false);
-
 
   const initialValues = {
     firstName:"",
@@ -25,8 +24,7 @@ const Register = () => {
   };
 
   const onSubmit = (values) => {
-   register(values).then(()=>{alert("you have registered successfully"); navigate("/login")})
-
+    register(values).then(()=>{alert("you have registered successfully"); navigate("/login")})
   };
 
   const validationSchema = Yup.object({
@@ -37,10 +35,50 @@ const Register = () => {
     password:Yup.string().required('password is required')
   })
 
+  const googleSuccess = async res => {
+    const result = res?.profileObj
 
+    const resgisterValues = {
+      firstName: result?.givenName,
+      lastName: result?.familyName,
+      userName: result?.name,
+      email: result?.email,
+      password: result?.googleId,
+    }
 
+    try {
+      register(resgisterValues)
+        .then(() => alert("you have registered successfully"))
+        .catch(error => alert('User already exists with this email'))
+    } catch(error) {
+      console.log(error)
+    }
+    navigate("/login")
+  }
 
+  const googleFailure = (error) => {
+    console.log('Google sign up was unsuccessful. Please try later.')
+    console.log(error)
+  }
 
+  const registerFacebook = res => {
+    const resgisterValues = {
+      firstName: null,
+      lastName: null,
+      userName: res?.name,
+      email: `${res.name.split(" ")[0]}${res?.userID}@gmail.com`,
+      password: res?.userID,
+    }
+
+    try {
+      register(resgisterValues)
+        .then(() => alert("you have registered successfully"))
+        .catch(error => alert('User already exists with connected email'))
+    } catch (error) {
+      console.log(error)
+    }
+    navigate("/login")
+  }
 
   return (
     <MainLayout>
@@ -103,6 +141,29 @@ const Register = () => {
           <div className="error-message"><ErrorMessage name="password"/> </div>
 
           <button className="signIn-btn" type="submit">create</button>
+
+          <GoogleLogin
+            clientId={'1068850605287-o1pignk020ft6da6c5ijovube2km1k49.apps.googleusercontent.com'}
+            render={props => <GoogleButton
+              onClick={props.onClick}
+              disabled={props.disabled}
+              />
+            }
+            cookiePolicy='single_host_origin'
+            onSuccess={googleSuccess}
+            onFailure={googleFailure}
+          />
+
+          <FacebookLogin
+            appId="417725786780379"
+            autoLoad={false}
+            fields="name,email,picture"
+            scope="public_profile,user_friends"
+            callback={registerFacebook}
+            render={props => (
+              <FacebookButton onClick={props.onClick} />
+            )}
+          />
 
         </Form>
         </Formik>
@@ -189,7 +250,7 @@ const RegisterStyled = styled.div`
   }
 
   .signIn-btn {
-    width: 120px;
+    width: 184px;
     align-self: center;
     height: 45px;
     border: none;
